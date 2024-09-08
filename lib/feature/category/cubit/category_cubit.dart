@@ -6,10 +6,19 @@ part 'category_state.dart';
 class CategoryCubit extends Cubit<CategoryState> {
   CategoryCubit()
       : super(
-        const CategoryState(),
+          const CategoryState(),
         );
 
-  void getCategories(){
-    return emit(const CategoryState(categories: ['Linux', 'Docker', 'Cloud']));
+  void initial() {
+    const categories = [
+      CategoryUIModels(category: 'Linux', difficulty: 'Easy'),
+      CategoryUIModels(category: 'Docker', difficulty: 'Easy'),
+      CategoryUIModels(category: 'Cloud', difficulty: 'Easy')
+    ];
+
+    const difficulties = ['Easy', 'Medium', 'Hard'];
+    return emit(
+      const CategoryState(categories: categories, difficulties: difficulties),
+    );
   }
 }

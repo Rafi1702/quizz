@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: BlocProvider<CategoryCubit>(
-        create: (context) => CategoryCubit()..getCategories(),
+        create: (context) => CategoryCubit()..initial(),
         child: const CategoryScreen(),
       ),
     );

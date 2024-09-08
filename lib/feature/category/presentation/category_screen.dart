@@ -21,7 +21,8 @@ class CategoryScreen extends StatelessWidget {
                 separatorBuilder: (context, index) =>
                     const SizedBox(height: 10.0),
                 itemBuilder: (context, index) => CategoryImagePlaceholder(
-                  categoryTitle: state.categories[index],
+                  category: state.categories[index],
+                  difficulties: state.difficulties,
                 ),
               );
             },
