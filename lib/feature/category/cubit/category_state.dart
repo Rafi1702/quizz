@@ -1,10 +1,11 @@
 part of 'category_cubit.dart';
 
-sealed class CategoryState extends Equatable {
-  const CategoryState();
-}
+class CategoryState extends Equatable {
+  const CategoryState({this.categories = const []});
 
-final class CategoryInitial extends CategoryState {
+  final List<String> categories;
+
   @override
-  List<Object> get props => [];
+  // TODO: implement props
+  List<Object?> get props => [categories];
 }

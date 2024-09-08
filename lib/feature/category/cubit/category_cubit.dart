@@ -1,8 +1,15 @@
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
 part 'category_state.dart';
 
 class CategoryCubit extends Cubit<CategoryState> {
-  CategoryCubit() : super(CategoryInitial());
+  CategoryCubit()
+      : super(
+        const CategoryState(),
+        );
+
+  void getCategories(){
+    return emit(const CategoryState(categories: ['Linux', 'Docker', 'Cloud']));
+  }
 }
