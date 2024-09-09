@@ -10,13 +10,17 @@ class CategoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Categories'),
+      ),
       body: SafeArea(
         child: SizedBox(
           child: BlocBuilder<CategoryCubit, CategoryState>(
             buildWhen: (prev, curr) => prev.categories != curr.categories,
             builder: (context, state) {
               return ListView.separated(
-                padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+                padding: const EdgeInsets.symmetric(
+                    vertical: 10.0, horizontal: 16.0),
                 itemCount: state.categories.length,
                 separatorBuilder: (context, index) =>
                     const SizedBox(height: 10.0),

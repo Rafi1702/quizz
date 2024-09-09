@@ -5,6 +5,11 @@ class CategoryUIModels {
 
   final String category;
   final String difficulty;
+
+  CategoryUIModels copyWith({String? category, String? difficulty}) =>
+      CategoryUIModels(
+          category: category ?? this.category,
+          difficulty: difficulty ?? this.difficulty);
 }
 
 class CategoryState extends Equatable {
@@ -15,6 +20,12 @@ class CategoryState extends Equatable {
 
   final List<CategoryUIModels> categories;
   final List<String> difficulties;
+
+  CategoryState copyWith(
+          {List<CategoryUIModels>? categories, List<String>? difficulties}) =>
+      CategoryState(
+          categories: categories ?? this.categories,
+          difficulties: difficulties ?? this.difficulties);
 
   @override
   // TODO: implement props

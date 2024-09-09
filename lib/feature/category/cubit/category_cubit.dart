@@ -21,4 +21,16 @@ class CategoryCubit extends Cubit<CategoryState> {
       const CategoryState(categories: categories, difficulties: difficulties),
     );
   }
+
+  void changeCategoryDifficulty(String category, String difficulty){
+    final updatedCategories = state.categories.map((e) {
+      if(e.category == category){
+        return e.copyWith(difficulty: difficulty);
+      }
+      return e;
+    }).toList();
+
+    emit(state.copyWith(categories: updatedCategories));
+
+  }
 }

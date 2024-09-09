@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quizz/feature/category/cubit/category_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quizz/feature/questions/presentation/questions_screen.dart';
 
 class CategoryImagePlaceholder extends StatelessWidget {
   final CategoryUIModels category;
@@ -10,13 +12,51 @@ class CategoryImagePlaceholder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return GestureDetector(
+      onTap: () {
+        showDialog<void>(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+                content: Text.rich(
+                  TextSpan(
+                    text: 'Do u really want to start ',
+                    children: [
+                      TextSpan(
+                        text: category.category,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const TextSpan(text: ' quiz ?'),
+                    ],
+                  ),
+                ),
+                actions: [
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) {
+                          return const QuestionsScreen();
+                        },
+                      ));
+                    },
+                    child: const Text('Yes'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('No'),
+                  ),
+                ]);
+          },
+        );
+      },
       child: Stack(
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(8.0),
             child: Image.network(
-              'https://placehold.co/400x200/jpg',
+              'https://placehold.co/400x250/jpg',
             ),
           ),
           Positioned.fill(
@@ -32,24 +72,33 @@ class CategoryImagePlaceholder extends StatelessWidget {
                       spacing: 4.0,
                       children: difficulties
                           .map(
-                            (e) => Chip(
-                              label: Text(
-                                e,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelMedium!
-                                    .copyWith(
-                                        color: e == category.difficulty
-                                            ? Colors.white
-                                            : Colors.black),
+                            (e) => GestureDetector(
+                              onTap: () {
+                                context
+                                    .read<CategoryCubit>()
+                                    .changeCategoryDifficulty(
+                                        category.category, e);
+                              },
+                              child: Chip(
+                                elevation: 0,
+                                label: Text(
+                                  e,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelMedium!
+                                      .copyWith(
+                                          color: e == category.difficulty
+                                              ? Colors.white
+                                              : Colors.black),
+                                ),
+                                backgroundColor: e == category.difficulty
+                                    ? e.getChipColor()
+                                    : Colors.white,
+                                side: BorderSide(
+                                    color: e.getChipColor(), width: 1.5),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(16.0)),
                               ),
-                              backgroundColor: e == category.difficulty
-                                  ? e.getChipColor()
-                                  : Colors.white,
-                              side: BorderSide(
-                                  color: e.getChipColor(), width: 1.5),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16.0)),
                             ),
                           )
                           .toList(),
