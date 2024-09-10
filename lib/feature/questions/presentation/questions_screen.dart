@@ -10,31 +10,50 @@ class QuestionsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Questions')),
-      body: BlocBuilder<QuestionsCubit, QuestionsState>(
-        buildWhen: (prev, curr) => prev.status != curr.status,
-        builder: (context, state) {
-          switch (state.status) {
-            case QuestionsStatus.initial:
-              return const Center(child: CircularProgressIndicator());
-            case QuestionsStatus.success:
-              return const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    HeaderSection(),
-                    SizedBox(height: 20.0),
-                    QuizSection(),
-                    Spacer(),
-                  ],
-                ),
-              );
-            default:
-              return Container();
-          }
-        },
+      body: SafeArea(
+        child: BlocBuilder<QuestionsCubit, QuestionsState>(
+          buildWhen: (prev, curr) => prev.status != curr.status,
+          builder: (context, state) {
+            switch (state.status) {
+              case QuestionsStatus.initial:
+                return const Center(child: CircularProgressIndicator());
+              case QuestionsStatus.success:
+                return SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const HeaderSection(),
+                        const SizedBox(height: 20.0),
+                        const QuizSection(),
+                        ElevatedButton(
+                            child: const Text('Next'),
+                            onPressed: () {
+                              context.read<QuestionsCubit>().onQuestionsNext();
+                            }),
+                      ],
+                    ),
+                  ),
+                );
+              default:
+                return Container();
+            }
+          },
+        ),
       ),
+    );
+  }
+}
+
+class ChangeQuestionButton extends StatelessWidget {
+  const ChangeQuestionButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () {},
+      child: const Text('Next'),
     );
   }
 }
@@ -66,7 +85,9 @@ class QuizSection extends StatelessWidget {
                 child: AnswerBox(
                   answer: state.question?.answers?.answers[index].answer ??
                       'Unavailable',
-                  isSelected: state.question?.answers?.answers[index].isSelected??false,
+                  isSelected:
+                      state.question?.answers?.answers[index].isSelected ??
+                          false,
                 ),
               ),
               separatorBuilder: (context, index) =>
@@ -92,7 +113,9 @@ class AnswerBox extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 8.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.0),
-        color: isSelected? Colors.purple:Theme.of(context).colorScheme.onSurface,
+        color: isSelected
+            ? Colors.purple
+            : Theme.of(context).colorScheme.onSurface,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -122,7 +145,9 @@ class HeaderSection extends StatelessWidget {
       children: [
         InkWell(
           child: const Icon(Icons.close),
-          onTap: () {},
+          onTap: () {
+            Navigator.of(context).pop();
+          },
         ),
         const QuestionNumberBox(),
         const TimerBox(),

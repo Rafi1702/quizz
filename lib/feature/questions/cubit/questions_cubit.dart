@@ -28,18 +28,20 @@ class QuestionsCubit extends Cubit<QuestionsState> {
       final quiz = await quizRepository.getQuiz();
 
       emit(state.copyWith(
-          status: QuestionsStatus.success, question: quiz[state.currentIndex]));
+          status: QuestionsStatus.success,
+          question: quiz[state.currentIndex],
+          quiz: quiz));
 
       // Start Timer After Success to fetch Quiz
       timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-        onSecondsChange(state.duration - 1);
+        onDurationChange(state.duration - 1);
       });
     } catch (e) {
       emit(state.copyWith(status: QuestionsStatus.error));
     }
   }
 
-  void onSecondsChange(int value) {
+  void onDurationChange(int value) {
     final bool isTimesUp = value == 0;
     if (isTimesUp) timer.cancel();
     return emit(state.copyWith(duration: value, isTimesUp: isTimesUp));
@@ -59,6 +61,27 @@ class QuestionsCubit extends Cubit<QuestionsState> {
       answers: state.question?.answers?.copyWith(answers: updatedChoice),
     );
 
-    return emit(state.copyWith(question: updateQuestion));
+    final updatedQuiz = state.quiz.asMap().entries.map((e) {
+      if (e.key == state.currentIndex) {
+        return updateQuestion;
+      }
+      return e.value;
+    }).toList();
+
+    return emit(
+      state.copyWith(
+        quiz: updatedQuiz,
+        question: updateQuestion,
+      ),
+    );
+  }
+
+  void onQuestionsNext() {
+    if (state.currentIndex == state.quiz.length - 1) return;
+
+    final currentIndex = state.currentIndex + 1;
+    final updatedQuestion = state.quiz[currentIndex];
+
+    emit(state.copyWith(question: updatedQuestion, currentIndex: currentIndex));
   }
 }

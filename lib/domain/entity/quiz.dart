@@ -21,27 +21,13 @@ class QuizEntity {
 
 class AnswersEntity {
   final List<AnswerEntity> answers;
-  const AnswersEntity({required this.answers});
-  AnswersEntity copyWith({List<AnswerEntity>? answers}){
-    return AnswersEntity(answers: answers??this.answers);
-  }
-  //
-  // const AnswersEntity(
-  //     {required this.answerA,
-  //     required this.answerB,
-  //     required this.answerC,
-  //     required this.answerD});
-  //
-  // AnswersEntity copyWith(AnswerEntity? answerA, AnswerEntity? answerB,
-  //     AnswerEntity? answerC, AnswerEntity? answerD) {
-  //   return AnswersEntity(
-  //     answerA: answerA ?? this.answerA,
-  //     answerB: answerB ?? this.answerB,
-  //     answerC: answerC ?? this.answerC,
-  //     answerD: answerD ?? this.answerD,
-  //   );
-  }
 
+  const AnswersEntity({required this.answers});
+
+  AnswersEntity copyWith({List<AnswerEntity>? answers}) {
+    return AnswersEntity(answers: answers ?? this.answers);
+  }
+}
 
 class AnswerEntity {
   const AnswerEntity({this.answer, this.isSelected = false});
