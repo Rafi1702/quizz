@@ -3,6 +3,8 @@ import 'package:quizz/feature/category/cubit/category_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quizz/feature/questions/presentation/questions_screen.dart';
 
+import '../../questions/cubit/questions_cubit.dart';
+
 class CategoryImagePlaceholder extends StatelessWidget {
   final CategoryUIModels category;
   final List<String> difficulties;
@@ -33,11 +35,7 @@ class CategoryImagePlaceholder extends StatelessWidget {
                 actions: [
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) {
-                          return const QuestionsScreen();
-                        },
-                      ));
+                      Navigator.of(context).pushNamed(QuestionsScreen.route);
                     },
                     child: const Text('Yes'),
                   ),

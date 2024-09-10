@@ -1,10 +1,38 @@
 part of 'questions_cubit.dart';
 
-sealed class QuestionsState extends Equatable {
-  const QuestionsState();
-}
+enum QuestionsStatus { initial, loading, success, error }
 
-final class QuestionsInitial extends QuestionsState {
+class QuestionsState extends Equatable {
+  const QuestionsState({
+    this.duration = 10,
+    this.isTimesUp = false,
+    this.status = QuestionsStatus.initial,
+    this.quiz = const [],
+    this.question,
+    this.currentIndex = 0,
+  });
+
+  final int duration;
+  final bool isTimesUp;
+  final QuestionsStatus status;
+  final List<QuizEntity> quiz;
+  final QuizEntity? question;
+  final int currentIndex;
+
+  QuestionsState copyWith(
+          {int? duration,
+          bool? isTimesUp,
+          QuestionsStatus? status,
+          List<QuizEntity>? quiz, QuizEntity? question, int? currentIndex}) =>
+      QuestionsState(
+        duration: duration ?? this.duration,
+        isTimesUp: isTimesUp ?? this.isTimesUp,
+        status: status ?? this.status,
+        quiz: quiz ?? this.quiz,
+        question: question??this.question,
+        currentIndex: currentIndex??this.currentIndex,
+      );
+
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [duration, isTimesUp, status, question, currentIndex];
 }
