@@ -130,7 +130,7 @@ extension on String {
       case 'Easy':
         return Colors.green;
       case 'Medium':
-        return Colors.yellowAccent;
+        return Colors.amber;
       case 'Hard':
         return Colors.red;
       default:
