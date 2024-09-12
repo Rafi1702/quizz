@@ -13,10 +13,10 @@ class QuizApi {
     url = dotenv.env['API_URL'];
   }
 
-  Future<List<QuizDto>> getQuiz() async {
+  Future<List<QuizDto>> getQuiz({required String category, required String difficulty}) async {
 
     try {
-      final response = await http.get(Uri.parse('$url/questions'), headers: {
+      final response = await http.get(Uri.parse('$url/questions?category=$category&difficulty=$difficulty'), headers: {
         'x-api-key': key ?? 'none',
       });
       return (jsonDecode(response.body) as List).map((e){

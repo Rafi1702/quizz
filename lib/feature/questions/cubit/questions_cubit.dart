@@ -10,9 +10,7 @@ part 'questions_state.dart';
 
 class QuestionsCubit extends Cubit<QuestionsState> {
   QuestionsCubit({required this.quizRepository})
-      : super(const QuestionsState()) {
-    getQuestions();
-  }
+      : super(const QuestionsState());
 
   late Timer timer;
   final QuizRepository quizRepository;
@@ -23,9 +21,11 @@ class QuestionsCubit extends Cubit<QuestionsState> {
     super.close();
   }
 
-  Future<void> getQuestions() async {
+  Future<void> getQuestions(
+      {required String category, required String difficulty}) async {
     try {
-      final quiz = await quizRepository.getQuiz();
+      final quiz = await quizRepository.getQuiz(
+          category: category, difficulty: difficulty);
 
       emit(state.copyWith(
         status: QuestionsStatus.success,

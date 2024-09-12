@@ -48,11 +48,7 @@ class MyApp extends StatelessWidget {
         child: const CategoryScreen(),
       ),
       routes: {
-        QuestionsScreen.route: (context) => BlocProvider(
-              create: (context) => QuestionsCubit(
-                  quizRepository: context.read<QuizRepository>()),
-              child: const QuestionsScreen(),
-            ),
+        QuestionsScreen.route: (context) => const QuestionsScreen(),
       },
     );
   }

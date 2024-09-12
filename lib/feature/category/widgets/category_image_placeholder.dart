@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quizz/feature/category/cubit/category_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quizz/feature/category/presentation/category_screen.dart';
 import 'package:quizz/feature/questions/presentation/questions_screen.dart';
 
 import '../../questions/cubit/questions_cubit.dart';
@@ -35,7 +36,12 @@ class CategoryImagePlaceholder extends StatelessWidget {
                 actions: [
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.of(context).pushNamed(QuestionsScreen.route);
+                      Navigator.of(context).pushNamed(
+                        QuestionsScreen.route,
+                        arguments: QuestionScreenArgument(
+                            category: category.category,
+                            difficulty: category.difficulty),
+                      );
                     },
                     child: const Text('Yes'),
                   ),

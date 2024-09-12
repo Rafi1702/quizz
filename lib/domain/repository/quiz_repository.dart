@@ -7,9 +7,9 @@ class QuizRepository {
 
   const QuizRepository(this.quizApi);
 
-  Future<List<QuizEntity>> getQuiz() async {
+  Future<List<QuizEntity>> getQuiz({required String category, required String difficulty}) async {
     try {
-      final data = await quizApi.getQuiz();
+      final data = await quizApi.getQuiz(category: category, difficulty: difficulty);
 
       final dtoToEntity = data.map((e) {
         return QuizEntity(

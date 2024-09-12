@@ -4,6 +4,11 @@ import 'package:quizz/feature/category/cubit/category_cubit.dart';
 import 'package:quizz/feature/category/cubit/category_cubit.dart';
 import 'package:quizz/feature/category/widgets/category_image_placeholder.dart';
 
+class QuestionScreenArgument{
+  final String difficulty;
+  final String category;
+  const QuestionScreenArgument({required this.difficulty, required this.category});
+}
 class CategoryScreen extends StatelessWidget {
   const CategoryScreen({super.key});
 
