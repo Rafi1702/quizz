@@ -43,11 +43,8 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: BlocProvider<CategoryCubit>(
-        create: (context) => CategoryCubit()..initial(),
-        child: const CategoryScreen(),
-      ),
       routes: {
+        CategoryScreen.route: (context) => const CategoryScreen(),
         QuestionsScreen.route: (context) => const QuestionsScreen(),
       },
     );

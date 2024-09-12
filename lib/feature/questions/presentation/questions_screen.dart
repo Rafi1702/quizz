@@ -21,6 +21,25 @@ class QuestionsScreen extends StatelessWidget {
                 category: arguments.category, difficulty: arguments.difficulty),
       child: Scaffold(
         appBar: AppBar(
+          leading: BackButton(onPressed: () {
+            showDialog<void>(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: const Text('Caution'),
+                    content:
+                        const Text('Your answer is not saved when you quit'),
+                    actions: [
+                      ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).popUntil(ModalRoute.withName(CategoryScreen.route));
+                          },
+                          child: const Text('Yes')),
+                      ElevatedButton(onPressed: () {}, child: const Text('No'))
+                    ],
+                  );
+                });
+          }),
           title: Text(arguments.category),
           centerTitle: true,
         ),
