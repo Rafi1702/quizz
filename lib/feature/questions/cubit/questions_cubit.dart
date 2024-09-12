@@ -28,9 +28,11 @@ class QuestionsCubit extends Cubit<QuestionsState> {
       final quiz = await quizRepository.getQuiz();
 
       emit(state.copyWith(
-          status: QuestionsStatus.success,
-          question: quiz[state.currentIndex],
-          quiz: quiz));
+        status: QuestionsStatus.success,
+        question: quiz[state.currentIndex],
+        quiz: quiz,
+        quizLength: quiz.length,
+      ));
 
       // Start Timer After Success to fetch Quiz
       timer = Timer.periodic(const Duration(seconds: 1), (timer) {
@@ -45,20 +47,18 @@ class QuestionsCubit extends Cubit<QuestionsState> {
     final bool isTimesUp = value == 0;
     if (isTimesUp) timer.cancel();
     return emit(state.copyWith(duration: value, isTimesUp: isTimesUp));
-    // print('seconds: ${state.seconds}, condition: ${state.isTimesUp}');
   }
 
   void onAnswerSelected(int index) {
-    final updatedChoice =
-        state.question?.answers?.answers?.asMap().entries.map((e) {
+    final updatedChoice = state.question?.answers?.asMap().entries.map((e) {
       if (e.key == index) {
-        return e.value.copyWith(isSelected: true);
+        return e.value?.copyWith(isSelected: true);
       }
-      return e.value.copyWith(isSelected: false);
+      return e.value?.copyWith(isSelected: false);
     }).toList();
 
     final updateQuestion = state.question?.copyWith(
-      answers: state.question?.answers?.copyWith(answers: updatedChoice),
+      answers: updatedChoice,
     );
 
     final updatedQuiz = state.quiz.asMap().entries.map((e) {
@@ -76,12 +76,23 @@ class QuestionsCubit extends Cubit<QuestionsState> {
     );
   }
 
-  void onQuestionsNext() {
+  void onQuestionNext() {
     if (state.currentIndex == state.quiz.length - 1) return;
 
     final currentIndex = state.currentIndex + 1;
     final updatedQuestion = state.quiz[currentIndex];
 
-    emit(state.copyWith(question: updatedQuestion, currentIndex: currentIndex));
+    return emit(
+        state.copyWith(question: updatedQuestion, currentIndex: currentIndex));
+  }
+
+  void onQuestionPrevious() {
+    if (state.currentIndex == 0) return;
+
+    final currentIndex = state.currentIndex - 1;
+    final updatedQuestion = state.quiz[currentIndex];
+
+    return emit(
+        state.copyWith(question: updatedQuestion, currentIndex: currentIndex));
   }
 }

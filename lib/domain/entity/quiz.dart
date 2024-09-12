@@ -1,31 +1,21 @@
 class QuizEntity {
   final int? id;
   final String? question;
-  final AnswersEntity? answers;
-  final CorrectAnswersEntity? correctAnswers;
+  final List<AnswerEntity?>? answers;
+  final List<CorrectAnswersEntity?>? correctAnswers;
 
   const QuizEntity({this.id, this.question, this.answers, this.correctAnswers});
 
   QuizEntity copyWith(
       {int? id,
       String? question,
-      AnswersEntity? answers,
-      CorrectAnswersEntity? correctAnswers}) {
+      List<AnswerEntity?>? answers,
+      List<CorrectAnswersEntity?>? correctAnswers}) {
     return QuizEntity(
         id: id ?? this.id,
         question: question ?? this.question,
         answers: answers ?? this.answers,
         correctAnswers: correctAnswers ?? this.correctAnswers);
-  }
-}
-
-class AnswersEntity {
-  final List<AnswerEntity> answers;
-
-  const AnswersEntity({required this.answers});
-
-  AnswersEntity copyWith({List<AnswerEntity>? answers}) {
-    return AnswersEntity(answers: answers ?? this.answers);
   }
 }
 
@@ -40,14 +30,9 @@ class AnswerEntity {
 }
 
 class CorrectAnswersEntity {
-  final String? answerACorrect;
-  final String? answerBCorrect;
-  final String? answerCCorrect;
-  final String? answerDCorrect;
+  final bool? isCorrect;
 
-  const CorrectAnswersEntity(
-      {this.answerACorrect,
-      this.answerBCorrect,
-      this.answerCCorrect,
-      this.answerDCorrect});
+  const CorrectAnswersEntity({required this.isCorrect});
 }
+
+

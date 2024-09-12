@@ -10,7 +10,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'domain/repository/quiz_repository.dart';
 
 void main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
   runApp(RepositoryProvider(
@@ -30,12 +29,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         elevatedButtonTheme: ElevatedButtonThemeData(
             style: ButtonStyle(
-              shape: WidgetStatePropertyAll(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-              ),
-            )),
+          backgroundColor:
+              WidgetStatePropertyAll(Theme.of(context).colorScheme.primary),
+          shape: WidgetStatePropertyAll(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+          ),
+        )),
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.deepPurple,
           brightness: Brightness.dark,
@@ -43,15 +44,13 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: BlocProvider<CategoryCubit>(
-        create: (context) =>
-        CategoryCubit()
-          ..initial(),
+        create: (context) => CategoryCubit()..initial(),
         child: const CategoryScreen(),
       ),
       routes: {
-        QuestionsScreen.route: (context) =>
-            BlocProvider(
-              create: (context) => QuestionsCubit(quizRepository: context.read<QuizRepository>()),
+        QuestionsScreen.route: (context) => BlocProvider(
+              create: (context) => QuestionsCubit(
+                  quizRepository: context.read<QuizRepository>()),
               child: const QuestionsScreen(),
             ),
       },

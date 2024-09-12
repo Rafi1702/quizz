@@ -10,6 +10,7 @@ class QuestionsState extends Equatable {
     this.quiz = const [],
     this.question,
     this.currentIndex = 0,
+    this.quizLength = 0,
   });
 
   final int duration;
@@ -18,12 +19,13 @@ class QuestionsState extends Equatable {
   final List<QuizEntity?> quiz;
   final QuizEntity? question;
   final int currentIndex;
+  final int quizLength;
 
   QuestionsState copyWith(
           {int? duration,
           bool? isTimesUp,
           QuestionsStatus? status,
-          List<QuizEntity?>? quiz, QuizEntity? question, int? currentIndex}) =>
+          List<QuizEntity?>? quiz, QuizEntity? question, int? currentIndex, int? quizLength}) =>
       QuestionsState(
         duration: duration ?? this.duration,
         isTimesUp: isTimesUp ?? this.isTimesUp,
@@ -31,8 +33,9 @@ class QuestionsState extends Equatable {
         quiz: quiz ?? this.quiz,
         question: question??this.question,
         currentIndex: currentIndex??this.currentIndex,
+        quizLength: quizLength??this.quizLength,
       );
 
   @override
-  List<Object?> get props => [duration, isTimesUp, status, question, currentIndex];
+  List<Object?> get props => [duration, isTimesUp, status, question, currentIndex, quizLength,];
 }

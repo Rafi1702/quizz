@@ -15,21 +15,16 @@ class QuizRepository {
         return QuizEntity(
           id: e.id,
           question: e.question,
-          answers: AnswersEntity(answers: [
+          answers: [
             AnswerEntity(answer: e.answers?.answerA),
             AnswerEntity(answer: e.answers?.answerB),
             AnswerEntity(answer: e.answers?.answerC),
             AnswerEntity(answer: e.answers?.answerD)
-          ]),
-          correctAnswers: CorrectAnswersEntity(
-            answerACorrect: e.correctAnswers?.answerACorrect,
-            answerBCorrect: e.correctAnswers?.answerBCorrect,
-            answerCCorrect: e.correctAnswers?.answerCCorrect,
-            answerDCorrect: e.correctAnswers?.answerDCorrect,
-          ),
+          ],
+          correctAnswers: [],
         );
       }).toList();
-      print(dtoToEntity);
+
       return dtoToEntity;
     } catch (e) {
       throw Exception(e);

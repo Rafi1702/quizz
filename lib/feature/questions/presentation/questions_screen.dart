@@ -18,22 +18,19 @@ class QuestionsScreen extends StatelessWidget {
               case QuestionsStatus.initial:
                 return const Center(child: CircularProgressIndicator());
               case QuestionsStatus.success:
-                return SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const HeaderSection(),
-                        const SizedBox(height: 20.0),
-                        const QuizSection(),
-                        ElevatedButton(
-                            child: const Text('Next'),
-                            onPressed: () {
-                              context.read<QuestionsCubit>().onQuestionsNext();
-                            }),
-                      ],
-                    ),
+                return const Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 8.0,
+                    vertical: 10.0,
+                  ),
+                  child: Column(
+                    children: [
+                      QuestionExtra(),
+                      SizedBox(height: 20.0),
+                      QuestionSection(),
+                      Spacer(),
+                      ChangeQuestionButton(),
+                    ],
                   ),
                 );
               default:
@@ -51,15 +48,60 @@ class ChangeQuestionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () {},
-      child: const Text('Next'),
+    final nextButton = ElevatedButton(
+        style: const ButtonStyle(
+          shape: WidgetStatePropertyAll(
+            CircleBorder(),
+          ),
+        ),
+        child: const Icon(Icons.keyboard_arrow_right_rounded),
+        onPressed: () {
+          context.read<QuestionsCubit>().onQuestionNext();
+        });
+    final previousButton = ElevatedButton(
+        style: const ButtonStyle(
+          shape: WidgetStatePropertyAll(
+            CircleBorder(),
+          ),
+        ),
+        child: const Icon(Icons.keyboard_arrow_left_rounded),
+        onPressed: () {
+          context.read<QuestionsCubit>().onQuestionPrevious();
+        });
+    final submitButton =
+        ElevatedButton(child: const Text('Submit'), onPressed: () {});
+    return BlocBuilder<QuestionsCubit, QuestionsState>(
+      buildWhen: (prev, curr) =>
+          prev.currentIndex != curr.currentIndex ||
+          prev.quizLength != curr.quizLength,
+      builder: (context, state) {
+        if (state.currentIndex == 0) {
+          return Align(
+            alignment: Alignment.bottomRight,
+            child: nextButton,
+          );
+        } else if (state.currentIndex + 1 == state.quizLength) {
+          return Row(
+
+            children: [
+              previousButton,
+              const SizedBox(width: 10.0),
+              Expanded(flex: 3,child: submitButton),
+              const Spacer(),
+            ],
+          );
+        } else {
+          return Row(
+            children: [const Spacer(), previousButton, nextButton],
+          );
+        }
+      },
     );
   }
 }
 
-class QuizSection extends StatelessWidget {
-  const QuizSection({super.key});
+class QuestionSection extends StatelessWidget {
+  const QuestionSection({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -71,28 +113,26 @@ class QuizSection extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              textAlign: TextAlign.center,
               state.question!.question ?? 'Not Available',
-              style: Theme.of(context).textTheme.headlineMedium,
+              style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 40.0),
             ListView.separated(
-              physics: const NeverScrollableScrollPhysics(),
+              clipBehavior: Clip.none,
               shrinkWrap: true,
               itemBuilder: (context, index) => GestureDetector(
                 onTap: () =>
                     context.read<QuestionsCubit>().onAnswerSelected(index),
                 child: AnswerBox(
-                  answer: state.question?.answers?.answers[index].answer ??
-                      'Unavailable',
+                  answer:
+                      state.question?.answers?[index]?.answer ?? 'Unavailable',
                   isSelected:
-                      state.question?.answers?.answers[index].isSelected ??
-                          false,
+                      state.question?.answers?[index]?.isSelected ?? false,
                 ),
               ),
               separatorBuilder: (context, index) =>
                   const SizedBox(height: 10.0),
-              itemCount: state.question!.answers!.answers!.length,
+              itemCount: state.question!.answers!.length,
             ),
           ],
         );
@@ -135,46 +175,35 @@ class AnswerBox extends StatelessWidget {
   }
 }
 
-class HeaderSection extends StatelessWidget {
-  const HeaderSection({super.key});
+class QuestionExtra extends StatelessWidget {
+  const QuestionExtra({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return const Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        InkWell(
-          child: const Icon(Icons.close),
-          onTap: () {
-            Navigator.of(context).pop();
-          },
-        ),
-        const QuestionNumberBox(),
-        const TimerBox(),
+        QuestionCurrentNumber(),
+        TimerBox(),
       ],
     );
   }
 }
 
-class QuestionNumberBox extends StatelessWidget {
-  const QuestionNumberBox({super.key});
+class QuestionCurrentNumber extends StatelessWidget {
+  const QuestionCurrentNumber({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 40.0,
-      height: 40.0,
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.onSurface,
-        borderRadius: BorderRadius.circular(8.0),
-      ),
-      child: Center(
-        child: Text(
-          '1',
-          style:
-              TextStyle(color: Theme.of(context).colorScheme.onInverseSurface),
-        ),
-      ),
+    return BlocBuilder<QuestionsCubit, QuestionsState>(
+      buildWhen: (prev, curr) =>
+          prev.currentIndex != curr.currentIndex ||
+          prev.quizLength != curr.quizLength,
+      builder: (context, state) {
+        return Text(
+          'Question: ${state.currentIndex + 1}/${state.quizLength}',
+        );
+      },
     );
   }
 }
