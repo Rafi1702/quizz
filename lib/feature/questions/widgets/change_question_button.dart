@@ -1,0 +1,60 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quizz/feature/questions/cubit/questions_cubit.dart';
+
+class ChangeQuestionButton extends StatelessWidget {
+  const ChangeQuestionButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final nextButton = ElevatedButton(
+        style: const ButtonStyle(
+          shape: WidgetStatePropertyAll(
+            CircleBorder(),
+          ),
+        ),
+        child: const Icon(Icons.keyboard_arrow_right_rounded),
+        onPressed: () {
+          context.read<QuestionsCubit>().onQuestionNext();
+        });
+    final previousButton = ElevatedButton(
+        style: const ButtonStyle(
+          shape: WidgetStatePropertyAll(
+            CircleBorder(),
+          ),
+        ),
+        child: const Icon(Icons.keyboard_arrow_left_rounded),
+        onPressed: () {
+          context.read<QuestionsCubit>().onQuestionPrevious();
+        });
+    final submitButton =
+    ElevatedButton(child: const Text('Submit'), onPressed: () {});
+    return BlocBuilder<QuestionsCubit, QuestionsState>(
+      buildWhen: (prev, curr) =>
+      prev.currentIndex != curr.currentIndex ||
+          prev.quizLength != curr.quizLength,
+      builder: (context, state) {
+        if (state.currentIndex == 0) {
+          return Align(
+            alignment: Alignment.bottomRight,
+            child: nextButton,
+          );
+        } else if (state.currentIndex + 1 == state.quizLength) {
+          return Row(
+            children: [
+              previousButton,
+              const SizedBox(width: 10.0),
+              Expanded(flex: 3, child: submitButton),
+              const Spacer(),
+            ],
+          );
+        } else {
+          return Row(
+            children: [const Spacer(), previousButton, nextButton],
+          );
+        }
+      },
+    );
+  }
+}
+
