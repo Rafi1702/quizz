@@ -36,7 +36,7 @@ class CategoryImagePlaceholder extends StatelessWidget {
                 actions: [
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.of(context).pushNamed(
+                      Navigator.of(context).pushReplacementNamed(
                         QuestionsScreen.route,
                         arguments: QuestionScreenArgument(
                             category: category.category,
