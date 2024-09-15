@@ -11,6 +11,7 @@ class QuestionsState extends Equatable {
     this.question,
     this.currentIndex = 0,
     this.quizLength = 0,
+    this.errorMessage = '',
   });
 
   final int duration;
@@ -20,22 +21,36 @@ class QuestionsState extends Equatable {
   final QuizEntity? question;
   final int currentIndex;
   final int quizLength;
+  final String errorMessage;
 
-  QuestionsState copyWith(
-          {int? duration,
-          bool? isTimesUp,
-          QuestionsStatus? status,
-          List<QuizEntity?>? quiz, QuizEntity? question, int? currentIndex, int? quizLength}) =>
+  QuestionsState copyWith({int? duration,
+    bool? isTimesUp,
+    QuestionsStatus? status,
+    List<QuizEntity?>? quiz,
+    QuizEntity? question,
+    int? currentIndex,
+    int? quizLength,
+    String? errorMessage}) =>
       QuestionsState(
         duration: duration ?? this.duration,
         isTimesUp: isTimesUp ?? this.isTimesUp,
         status: status ?? this.status,
         quiz: quiz ?? this.quiz,
-        question: question??this.question,
-        currentIndex: currentIndex??this.currentIndex,
-        quizLength: quizLength??this.quizLength,
+        question: question ?? this.question,
+        currentIndex: currentIndex ?? this.currentIndex,
+        quizLength: quizLength ?? this.quizLength,
+        errorMessage: errorMessage ?? this.errorMessage,
       );
 
   @override
-  List<Object?> get props => [duration, isTimesUp, status, question, currentIndex, quizLength,];
+  List<Object?> get props =>
+      [
+        duration,
+        isTimesUp,
+        status,
+        question,
+        currentIndex,
+        quizLength,
+        errorMessage,
+      ];
 }

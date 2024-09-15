@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:quizz/data/models/quiz.dart';
@@ -18,11 +19,16 @@ class QuizApi {
     try {
       final response = await http.get(Uri.parse('$url/questions?category=$category&difficulty=$difficulty'), headers: {
         'x-api-key': key ?? 'none',
-      });
-      return (jsonDecode(response.body) as List).map((e){
-        return QuizDto.fromJson(e);
-      }).toList();
-    } catch (e) {
+      }).timeout(const Duration(seconds: 3));
+
+      if(response.statusCode == 200){
+        return (jsonDecode(response.body) as List).map((e){
+          return QuizDto.fromJson(e);
+        }).toList();
+      }
+      throw Exception(jsonDecode(response.body));
+
+    } on HttpException catch (e) {
       throw Exception(e);
     }
   }

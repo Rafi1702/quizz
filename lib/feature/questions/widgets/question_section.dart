@@ -20,20 +20,20 @@ class QuestionSection extends StatelessWidget {
             ),
             const SizedBox(height: 40.0),
             ListView.separated(
-              clipBehavior: Clip.none,
+              physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               itemBuilder: (context, index) => GestureDetector(
                 onTap: () =>
                     context.read<QuestionsCubit>().onAnswerSelected(index),
                 child: AnswerBox(
                   answer:
-                  state.question?.answers?[index]?.answer ?? 'Unavailable',
+                      state.question?.answers?[index]?.answer ?? 'Unavailable',
                   isSelected:
-                  state.question?.answers?[index]?.isSelected ?? false,
+                      state.question?.answers?[index]?.isSelected ?? false,
                 ),
               ),
               separatorBuilder: (context, index) =>
-              const SizedBox(height: 10.0),
+                  const SizedBox(height: 10.0),
               itemCount: state.question!.answers!.length,
             ),
           ],
@@ -68,11 +68,11 @@ class AnswerBox extends StatelessWidget {
               answer,
               style: isSelected
                   ? answerTextTheme.copyWith(
-                color: Theme.of(context).colorScheme.onSurface,
-              )
+                      color: Theme.of(context).colorScheme.onSurface,
+                    )
                   : answerTextTheme.copyWith(
-                color: Theme.of(context).colorScheme.onInverseSurface,
-              ),
+                      color: Theme.of(context).colorScheme.onInverseSurface,
+                    ),
             ),
           ),
           const Icon(Icons.check_circle),

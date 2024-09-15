@@ -12,17 +12,18 @@ class QuestionsCubit extends Cubit<QuestionsState> {
   QuestionsCubit({required this.quizRepository})
       : super(const QuestionsState());
 
-  late Timer timer;
+  Timer? timer;
   final QuizRepository quizRepository;
 
   @override
   Future<void> close() async {
-    timer.cancel();
+    timer?.cancel();
     super.close();
   }
 
   Future<void> getQuestions(
       {required String category, required String difficulty}) async {
+    emit(state.copyWith(status: QuestionsStatus.initial));
     try {
       final quiz = await quizRepository.getQuiz(
           category: category, difficulty: difficulty);
@@ -39,13 +40,13 @@ class QuestionsCubit extends Cubit<QuestionsState> {
         onDurationChange(state.duration - 1);
       });
     } catch (e) {
-      emit(state.copyWith(status: QuestionsStatus.error));
+      emit(state.copyWith(status: QuestionsStatus.error, errorMessage: e.toString()));
     }
   }
 
   void onDurationChange(int value) {
     final bool isTimesUp = value == 0;
-    if (isTimesUp) timer.cancel();
+    if (isTimesUp) timer?.cancel();
     return emit(state.copyWith(duration: value, isTimesUp: isTimesUp));
   }
 

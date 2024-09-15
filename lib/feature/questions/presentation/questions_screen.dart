@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quizz/domain/entity/quiz.dart';
 import 'package:quizz/domain/repository/quiz_repository.dart';
 import 'package:quizz/feature/category/presentation/category_screen.dart';
 import 'package:quizz/feature/questions/cubit/questions_cubit.dart';
@@ -24,25 +25,40 @@ class QuestionsScreen extends StatelessWidget {
                 category: arguments.category, difficulty: arguments.difficulty),
       child: Scaffold(
         appBar: AppBar(
-          leading: BackButton(onPressed: () {
-            showDialog<void>(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    title: const Text('Caution'),
-                    content:
-                        const Text('Your answer is not saved when you quit'),
-                    actions: [
-                      ElevatedButton(
-                          onPressed: () {
-                            Navigator.of(context).popUntil(ModalRoute.withName(CategoryScreen.route));
-                          },
-                          child: const Text('Yes')),
-                      ElevatedButton(onPressed: () {}, child: const Text('No'))
-                    ],
-                  );
-                });
-          }),
+          leading:
+              BlocSelector<QuestionsCubit, QuestionsState, List<QuizEntity?>>(
+            selector: (state) {
+              return state.quiz;
+            },
+            builder: (context, state) {
+              return BackButton(onPressed: () {
+                if (state.isEmpty) {
+                  Navigator.of(context).pop();
+                } else {
+                  showDialog<void>(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: const Text('Caution'),
+                          content: const Text(
+                              'Your answer is not saved when you quit'),
+                          actions: [
+                            ElevatedButton(
+                                onPressed: () {
+                                  Navigator.of(context).popUntil(
+                                      ModalRoute.withName(
+                                          CategoryScreen.route));
+                                },
+                                child: const Text('Yes')),
+                            ElevatedButton(
+                                onPressed: () {}, child: const Text('No'))
+                          ],
+                        );
+                      });
+                }
+              });
+            },
+          ),
           title: Text(arguments.category),
           centerTitle: true,
         ),
@@ -63,12 +79,33 @@ class QuestionsScreen extends StatelessWidget {
                       children: [
                         QuestionExtra(),
                         SizedBox(height: 20.0),
-                        QuestionSection(),
-                        Spacer(),
+                        Expanded(
+                          child: SingleChildScrollView(
+                            child: QuestionSection(),
+                          ),
+                        ),
                         ChangeQuestionButton(),
                       ],
                     ),
                   );
+                case QuestionsStatus.error:
+                  return Center(
+                      child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.refresh_rounded,
+                        size: 80.0,
+                      ),
+                      ElevatedButton(
+                          onPressed: () {
+                            context.read<QuestionsCubit>().getQuestions(
+                                category: arguments.category,
+                                difficulty: arguments.difficulty);
+                          },
+                          child: Text('Load Data')),
+                    ],
+                  ));
                 default:
                   return Container();
               }
@@ -79,10 +116,3 @@ class QuestionsScreen extends StatelessWidget {
     );
   }
 }
-
-
-
-
-
-
-
