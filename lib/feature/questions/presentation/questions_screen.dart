@@ -16,100 +16,111 @@ class QuestionsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final arguments =
-        ModalRoute.of(context)!.settings.arguments as QuestionScreenArgument;
+    ModalRoute
+        .of(context)!
+        .settings
+        .arguments as QuestionScreenArgument;
 
     return BlocProvider(
       create: (context) =>
-          QuestionsCubit(quizRepository: context.read<QuizRepository>())
-            ..getQuestions(
-                category: arguments.category, difficulty: arguments.difficulty),
-      child: Scaffold(
-        appBar: AppBar(
-          leading:
-              BlocSelector<QuestionsCubit, QuestionsState, List<QuizEntity?>>(
-            selector: (state) {
-              return state.quiz;
-            },
-            builder: (context, state) {
-              return BackButton(onPressed: () {
-                if (state.isEmpty) {
-                  Navigator.of(context).pop();
-                } else {
-                  showDialog<void>(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: const Text('Caution'),
-                          content: const Text(
-                              'Your answer is not saved when you quit'),
-                          actions: [
+      QuestionsCubit(quizRepository: context.read<QuizRepository>())
+        ..getQuestions(
+            category: arguments.category, difficulty: arguments.difficulty),
+      child: BlocListener<QuestionsCubit, QuestionsState>(
+        listenWhen: (prev, curr)=> prev.isTimesUp != curr.isTimesUp,
+        listener: (context, state) {
+          if(state.isTimesUp){
+            Navigator.of(context).pop();
+          }
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            leading:
+            BlocSelector<QuestionsCubit, QuestionsState, List<QuizEntity?>>(
+              selector: (state) {
+                return state.quiz;
+              },
+              builder: (context, state) {
+                return BackButton(onPressed: () {
+                  if (state.isEmpty) {
+                    Navigator.of(context).pop();
+                  } else {
+                    showDialog<void>(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text('Caution'),
+                            content: const Text(
+                                'Your answer is not saved when you quit'),
+                            actions: [
+                              ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.of(context).popUntil(
+                                        ModalRoute.withName(
+                                            CategoryScreen.route));
+                                  },
+                                  child: const Text('Yes')),
+                              ElevatedButton(
+                                  onPressed: () {}, child: const Text('No'))
+                            ],
+                          );
+                        });
+                  }
+                });
+              },
+            ),
+            title: Text(arguments.category),
+            centerTitle: true,
+          ),
+          body: SafeArea(
+            child: BlocBuilder<QuestionsCubit, QuestionsState>(
+              buildWhen: (prev, curr) => prev.status != curr.status,
+              builder: (context, state) {
+                switch (state.status) {
+                  case QuestionsStatus.initial:
+                    return const Center(child: CircularProgressIndicator());
+                  case QuestionsStatus.success:
+                    return const Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 8.0,
+                        vertical: 10.0,
+                      ),
+                      child: Column(
+                        children: [
+                          QuestionExtra(),
+                          SizedBox(height: 20.0),
+                          Expanded(
+                            child: SingleChildScrollView(
+                              child: QuestionSection(),
+                            ),
+                          ),
+                          ChangeQuestionButton(),
+                        ],
+                      ),
+                    );
+                  case QuestionsStatus.error:
+                    return Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.refresh_rounded,
+                              size: 80.0,
+                            ),
                             ElevatedButton(
                                 onPressed: () {
-                                  Navigator.of(context).popUntil(
-                                      ModalRoute.withName(
-                                          CategoryScreen.route));
+                                  context.read<QuestionsCubit>().getQuestions(
+                                      category: arguments.category,
+                                      difficulty: arguments.difficulty);
                                 },
-                                child: const Text('Yes')),
-                            ElevatedButton(
-                                onPressed: () {}, child: const Text('No'))
+                                child: Text('Load Data')),
                           ],
-                        );
-                      });
+                        ));
+                  default:
+                    return Container();
                 }
-              });
-            },
-          ),
-          title: Text(arguments.category),
-          centerTitle: true,
-        ),
-        body: SafeArea(
-          child: BlocBuilder<QuestionsCubit, QuestionsState>(
-            buildWhen: (prev, curr) => prev.status != curr.status,
-            builder: (context, state) {
-              switch (state.status) {
-                case QuestionsStatus.initial:
-                  return const Center(child: CircularProgressIndicator());
-                case QuestionsStatus.success:
-                  return const Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 8.0,
-                      vertical: 10.0,
-                    ),
-                    child: Column(
-                      children: [
-                        QuestionExtra(),
-                        SizedBox(height: 20.0),
-                        Expanded(
-                          child: SingleChildScrollView(
-                            child: QuestionSection(),
-                          ),
-                        ),
-                        ChangeQuestionButton(),
-                      ],
-                    ),
-                  );
-                case QuestionsStatus.error:
-                  return Center(
-                      child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.refresh_rounded,
-                        size: 80.0,
-                      ),
-                      ElevatedButton(
-                          onPressed: () {
-                            context.read<QuestionsCubit>().getQuestions(
-                                category: arguments.category,
-                                difficulty: arguments.difficulty);
-                          },
-                          child: Text('Load Data')),
-                    ],
-                  ));
-                default:
-                  return Container();
-              }
-            },
+              },
+            ),
           ),
         ),
       ),

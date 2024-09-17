@@ -25,7 +25,12 @@ class QuizRepository {
             AnswerEntity(answer: e.answers?.answerC),
             AnswerEntity(answer: e.answers?.answerD)
           ],
-          correctAnswers: [],
+          correctAnswers: [
+            CorrectAnswersEntity(isCorrect: e.correctAnswers?.answerACorrect == 'true'),
+            CorrectAnswersEntity(isCorrect: e.correctAnswers?.answerBCorrect == 'true'),
+            CorrectAnswersEntity(isCorrect: e.correctAnswers?.answerCCorrect == 'true'),
+            CorrectAnswersEntity(isCorrect: e.correctAnswers?.answerDCorrect == 'true'),
+          ],
         );
       }).toList();
 

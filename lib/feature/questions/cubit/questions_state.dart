@@ -4,7 +4,7 @@ enum QuestionsStatus { initial, loading, success, error }
 
 class QuestionsState extends Equatable {
   const QuestionsState({
-    this.duration = 10,
+    this.duration = 300,
     this.isTimesUp = false,
     this.status = QuestionsStatus.initial,
     this.quiz = const [],

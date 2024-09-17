@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:quizz/domain/entity/quiz.dart';
@@ -40,7 +39,8 @@ class QuestionsCubit extends Cubit<QuestionsState> {
         onDurationChange(state.duration - 1);
       });
     } catch (e) {
-      emit(state.copyWith(status: QuestionsStatus.error, errorMessage: e.toString()));
+      emit(state.copyWith(
+          status: QuestionsStatus.error, errorMessage: e.toString()));
     }
   }
 
