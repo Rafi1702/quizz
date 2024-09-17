@@ -14,6 +14,9 @@ class QuestionSection extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            state.question!.multipleCorrectAnswer!
+                ? const Text('Multiple Choice')
+                : const SizedBox.shrink(),
             Text(
               state.question!.question ?? 'Not Available',
               style: Theme.of(context).textTheme.titleLarge,

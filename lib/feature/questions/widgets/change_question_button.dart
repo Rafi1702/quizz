@@ -27,11 +27,10 @@ class ChangeQuestionButton extends StatelessWidget {
         onPressed: () {
           context.read<QuestionsCubit>().onQuestionPrevious();
         });
-    final submitButton =
-    ElevatedButton(child: const Text('Submit'), onPressed: () {});
+
     return BlocBuilder<QuestionsCubit, QuestionsState>(
       buildWhen: (prev, curr) =>
-      prev.currentIndex != curr.currentIndex ||
+          prev.currentIndex != curr.currentIndex ||
           prev.quizLength != curr.quizLength,
       builder: (context, state) {
         if (state.currentIndex == 0) {
@@ -44,7 +43,18 @@ class ChangeQuestionButton extends StatelessWidget {
             children: [
               previousButton,
               const SizedBox(width: 10.0),
-              Expanded(flex: 3, child: submitButton),
+              Expanded(
+                flex: 3,
+                child: BlocSelector<QuestionsCubit, QuestionsState, bool>(
+                  selector: (state) {
+                    return state.isAllAnswered;
+                  },
+                  builder: (context, state) => ElevatedButton(
+                    onPressed: state ? () {} : null,
+                    child: const Text('Submit'),
+                  ),
+                ),
+              ),
               const Spacer(),
             ],
           );
@@ -57,4 +67,3 @@ class ChangeQuestionButton extends StatelessWidget {
     );
   }
 }
-

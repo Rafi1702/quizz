@@ -4,7 +4,7 @@ enum QuestionsStatus { initial, loading, success, error }
 
 class QuestionsState extends Equatable {
   const QuestionsState({
-    this.duration = 300,
+    this.duration = 3600,
     this.isTimesUp = false,
     this.status = QuestionsStatus.initial,
     this.quiz = const [],
@@ -12,6 +12,7 @@ class QuestionsState extends Equatable {
     this.currentIndex = 0,
     this.quizLength = 0,
     this.errorMessage = '',
+    this.isAllAnswered = false,
   });
 
   final int duration;
@@ -22,6 +23,7 @@ class QuestionsState extends Equatable {
   final int currentIndex;
   final int quizLength;
   final String errorMessage;
+  final bool isAllAnswered;
 
   QuestionsState copyWith({int? duration,
     bool? isTimesUp,
@@ -30,6 +32,7 @@ class QuestionsState extends Equatable {
     QuizEntity? question,
     int? currentIndex,
     int? quizLength,
+    bool? isAllAnswered,
     String? errorMessage}) =>
       QuestionsState(
         duration: duration ?? this.duration,
@@ -40,6 +43,7 @@ class QuestionsState extends Equatable {
         currentIndex: currentIndex ?? this.currentIndex,
         quizLength: quizLength ?? this.quizLength,
         errorMessage: errorMessage ?? this.errorMessage,
+        isAllAnswered: isAllAnswered??this.isAllAnswered,
       );
 
   @override
@@ -52,5 +56,6 @@ class QuestionsState extends Equatable {
         currentIndex,
         quizLength,
         errorMessage,
+        isAllAnswered,
       ];
 }

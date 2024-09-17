@@ -4,6 +4,18 @@ import 'package:quizz/data/datasources/quiz_remote.dart';
 import 'package:quizz/data/models/quiz.dart';
 import 'package:quizz/domain/entity/quiz.dart';
 
+extension on String?{
+  bool get getBool{
+    switch(this){
+      case "true":
+        return true;
+      default:
+        return false;
+    }
+
+
+  }
+}
 class QuizRepository {
   final QuizApi quizApi;
 
@@ -19,6 +31,7 @@ class QuizRepository {
         return QuizEntity(
           id: e.id,
           question: e.question,
+          multipleCorrectAnswer: e.multipleCorrectAnswers.getBool,
           answers: [
             AnswerEntity(answer: e.answers?.answerA),
             AnswerEntity(answer: e.answers?.answerB),
@@ -26,10 +39,10 @@ class QuizRepository {
             AnswerEntity(answer: e.answers?.answerD)
           ],
           correctAnswers: [
-            CorrectAnswersEntity(isCorrect: e.correctAnswers?.answerACorrect == 'true'),
-            CorrectAnswersEntity(isCorrect: e.correctAnswers?.answerBCorrect == 'true'),
-            CorrectAnswersEntity(isCorrect: e.correctAnswers?.answerCCorrect == 'true'),
-            CorrectAnswersEntity(isCorrect: e.correctAnswers?.answerDCorrect == 'true'),
+            CorrectAnswersEntity(isCorrect: e.correctAnswers?.answerACorrect.getBool),
+            CorrectAnswersEntity(isCorrect: e.correctAnswers?.answerBCorrect.getBool),
+            CorrectAnswersEntity(isCorrect: e.correctAnswers?.answerCCorrect.getBool),
+            CorrectAnswersEntity(isCorrect: e.correctAnswers?.answerDCorrect.getBool),
           ],
         );
       }).toList();
