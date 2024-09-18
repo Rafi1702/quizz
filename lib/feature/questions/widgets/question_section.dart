@@ -37,7 +37,6 @@ class QuestionSection extends StatelessWidget {
                     ),
                   );
                 }
-
                 return const SizedBox.shrink();
               },
               separatorBuilder: (context, index) =>

@@ -5,6 +5,7 @@ import 'package:quizz/domain/repository/quiz_repository.dart';
 import 'package:quizz/feature/category/presentation/category_screen.dart';
 import 'package:quizz/feature/questions/cubit/questions_cubit.dart';
 import 'package:quizz/feature/questions/widgets/change_question_button.dart';
+import 'package:quizz/feature/questions/widgets/number_list.dart';
 import 'package:quizz/feature/questions/widgets/question_extra.dart';
 import 'package:quizz/feature/questions/widgets/question_section.dart';
 
@@ -87,6 +88,8 @@ class QuestionsScreen extends StatelessWidget {
                       ),
                       child: Column(
                         children: [
+                          NumberList(),
+                          SizedBox(height: 10.0),
                           QuestionExtra(),
                           SizedBox(height: 20.0),
                           Expanded(
@@ -103,7 +106,7 @@ class QuestionsScreen extends StatelessWidget {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.refresh_rounded,
                               size: 80.0,
                             ),
