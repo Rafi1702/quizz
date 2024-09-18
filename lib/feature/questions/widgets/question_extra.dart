@@ -7,11 +7,19 @@ class QuestionExtra extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return const Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: [
-        QuestionCurrentNumber(),
-        TimerBox(),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            QuestionCurrentNumber(),
+            TimerBox(),
+          ],
+        ),
+        SizedBox(height: 10.0),
+        TotalAnswer(),
       ],
     );
   }
@@ -30,6 +38,26 @@ class QuestionCurrentNumber extends StatelessWidget {
         return Text(
           'Question: ${state.currentIndex + 1}/${state.quizLength}',
         );
+      },
+    );
+  }
+}
+
+class TotalAnswer extends StatelessWidget {
+  const TotalAnswer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<QuestionsCubit, QuestionsState>(
+      buildWhen: (prev, curr) => prev.question != curr.question,
+      builder: (context, state) {
+        final question = state.question;
+        if (question != null) {
+          return question.multipleCorrectAnswer ?? false
+              ? Text('Multiple Choice: ${state.totalAnsweredByUserPerQuestion}/${state.shouldBeAnswerPerQuestion}')
+              : const SizedBox.shrink();
+        }
+        return const SizedBox.shrink();
       },
     );
   }

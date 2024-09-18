@@ -14,9 +14,6 @@ class QuestionSection extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            state.question!.multipleCorrectAnswer!
-                ? const Text('Multiple Choice')
-                : const SizedBox.shrink(),
             Text(
               state.question!.question ?? 'Not Available',
               style: Theme.of(context).textTheme.titleLarge,
@@ -25,16 +22,24 @@ class QuestionSection extends StatelessWidget {
             ListView.separated(
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemBuilder: (context, index) => GestureDetector(
-                onTap: () =>
-                    context.read<QuestionsCubit>().onAnswerSelected(index),
-                child: AnswerBox(
-                  answer:
-                      state.question?.answers?[index]?.answer ?? 'Unavailable',
-                  isSelected:
-                      state.question?.answers?[index]?.isSelected ?? false,
-                ),
-              ),
+              itemBuilder: (context, index) {
+                final answers = state.question?.answers?[index];
+
+                if(answers?.answer != null){
+                  return GestureDetector(
+                    onTap: () =>
+                        context.read<QuestionsCubit>().onAnswerSelected(index),
+                    child: AnswerBox(
+                      answer:
+                      answers?.answer ?? 'Unavailable',
+                      isSelected:
+                      answers?.isSelected ?? false,
+                    ),
+                  );
+                }
+
+                return const SizedBox.shrink();
+              },
               separatorBuilder: (context, index) =>
                   const SizedBox(height: 10.0),
               itemCount: state.question!.answers!.length,

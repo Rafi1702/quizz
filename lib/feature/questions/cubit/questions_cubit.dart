@@ -14,8 +14,6 @@ class QuestionsCubit extends Cubit<QuestionsState> {
   Timer? timer;
   final QuizRepository quizRepository;
   int mustBeAnsweredForSubmit = 0;
-  int mustBeAnsweredPerQuestion = 0;
-  int correctAnswerPerQuestion = 0;
 
   @override
   Future<void> close() async {
@@ -38,12 +36,12 @@ class QuestionsCubit extends Cubit<QuestionsState> {
 
       final question = quiz[state.currentIndex];
 
-      correctAnswerPerQuestion =
+      final shouldBeAnswerPerQuestion =
           countAnswerPerQuestion<CorrectAnswersEntity>(question,
               getItem: (item) => item.correctAnswers!,
               select: (select) => select.isCorrect!);
 
-      mustBeAnsweredPerQuestion =
+      final totalAnsweredByUserPerQuestion =
           countAnswerPerQuestion<AnswerEntity>(question,
               getItem: (item) => item.answers!,
               select: (select) => select.isSelected!);
@@ -53,6 +51,8 @@ class QuestionsCubit extends Cubit<QuestionsState> {
         question: question,
         quiz: quiz,
         quizLength: quiz.length,
+        shouldBeAnswerPerQuestion: shouldBeAnswerPerQuestion,
+        totalAnsweredByUserPerQuestion: totalAnsweredByUserPerQuestion,
       ));
 
       // Start Timer After Success to fetch Quiz
@@ -72,16 +72,16 @@ class QuestionsCubit extends Cubit<QuestionsState> {
   }
 
   void onAnswerSelected(int index) {
-    List<AnswerEntity>? updatedChoice =
-        updatedAnswers(question: state.question, choicedIndex: index);
+    List<AnswerEntity>? updatedAnswer =
+        updatedAnswers(question: state.question, choicedIndex: index, shouldBeAnsweredPerQuestion: state.shouldBeAnswerPerQuestion);
 
-    final updateQuestion = state.question?.copyWith(
-      answers: updatedChoice,
+    final updatedChoice = state.question?.copyWith(
+      answers: updatedAnswer,
     );
 
     final updatedQuiz = state.quiz.asMap().entries.map((e) {
       if (e.key == state.currentIndex) {
-        return updateQuestion;
+        return updatedChoice;
       }
       return e.value;
     }).toList();
@@ -91,56 +91,48 @@ class QuestionsCubit extends Cubit<QuestionsState> {
             select: (select) => select.isSelected!) ==
         mustBeAnsweredForSubmit;
 
+    final totalAnsweredByUserPerQuestion = countAnswerPerQuestion<AnswerEntity>(
+        updatedQuiz[state.currentIndex],
+        getItem: (item) => item.answers!,
+        select: (select) => select.isSelected!);
+
     return emit(
       state.copyWith(
         quiz: updatedQuiz,
-        question: updateQuestion,
+        question: updatedChoice,
         isAllAnswered: isAllAnswered,
+        totalAnsweredByUserPerQuestion: totalAnsweredByUserPerQuestion,
       ),
     );
   }
 
-  void onQuestionNext() {
-    if (state.currentIndex == state.quiz.length - 1) return;
+  void onQuestionNextOrPrevious(int Function(int) changeIndex) {
+    if (state.currentIndex == state.quiz.length - 1 && state.currentIndex < 0) {
+      return;
+    }
 
-    final currentIndex = state.currentIndex + 1;
+    final currentIndex = changeIndex(state.currentIndex);
+
     final updatedQuestion = state.quiz[currentIndex];
-    correctAnswerPerQuestion =
+
+    final shouldBeAnswerPerQuestion =
         countAnswerPerQuestion<CorrectAnswersEntity>(updatedQuestion,
             getItem: (item) => item.correctAnswers!,
             select: (select) => select.isCorrect!);
 
-    mustBeAnsweredPerQuestion = countAnswerPerQuestion<AnswerEntity>(
+    final totalAnsweredByUserPerQuestion = countAnswerPerQuestion<AnswerEntity>(
         updatedQuestion,
         getItem: (item) => item.answers!,
         select: (select) => select.isSelected!);
 
-
-
     return emit(
-        state.copyWith(question: updatedQuestion, currentIndex: currentIndex));
-  }
-
-  void onQuestionPrevious() {
-    if (state.currentIndex == 0) return;
-
-    final currentIndex = state.currentIndex - 1;
-    final updatedQuestion = state.quiz[currentIndex];
-    correctAnswerPerQuestion =
-        countAnswerPerQuestion<CorrectAnswersEntity>(updatedQuestion,
-            getItem: (item) => item.correctAnswers!,
-            select: (select) => select.isCorrect!);
-
-    mustBeAnsweredPerQuestion = countAnswerPerQuestion<AnswerEntity>(
-        updatedQuestion,
-        getItem: (item) => item.answers!,
-        select: (select) => select.isSelected!);
-
-    print(correctAnswerPerQuestion);
-    print(mustBeAnsweredPerQuestion);
-
-    return emit(
-        state.copyWith(question: updatedQuestion, currentIndex: currentIndex));
+      state.copyWith(
+        question: updatedQuestion,
+        currentIndex: currentIndex,
+        shouldBeAnswerPerQuestion: shouldBeAnswerPerQuestion,
+        totalAnsweredByUserPerQuestion: totalAnsweredByUserPerQuestion,
+      ),
+    );
   }
 
   //helper
@@ -149,7 +141,6 @@ class QuestionsCubit extends Cubit<QuestionsState> {
     required List<T> Function(QuizEntity) getItems,
     required bool Function(T) select,
   }) {
-    if (quiz == null) return 0;
     int counter = 0;
     for (var e in quiz) {
       final items = getItems(e!);
@@ -183,18 +174,24 @@ class QuestionsCubit extends Cubit<QuestionsState> {
   }
 
   List<AnswerEntity>? updatedAnswers(
-      {required QuizEntity? question, required int choicedIndex}) {
+      {required QuizEntity? question, required int choicedIndex, required int shouldBeAnsweredPerQuestion}) {
     if (question == null) return question?.answers;
 
+    final answers = question?.answers;
     if (question.multipleCorrectAnswer!) {
-      return question?.answers?.asMap().entries.map((e) {
+      var choicesMultiple = answers!.asMap().entries.where((e) => e.value.isSelected!).map((e) => e.key).toList();
+      return answers?.asMap().entries.map((e) {
+        if(choicesMultiple.length == shouldBeAnsweredPerQuestion && !choicesMultiple.contains(e.key)){
+          return e.value;
+        }
         if (e.key == choicedIndex) {
           return e.value.copyWith(isSelected: !e.value.isSelected!);
         }
+
         return e.value;
       }).toList();
     }
-    return state.question?.answers?.asMap().entries.map((e) {
+    return answers?.asMap().entries.map((e) {
       if (e.key == choicedIndex) {
         return e.value.copyWith(isSelected: true);
       }

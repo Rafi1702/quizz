@@ -15,7 +15,9 @@ class ChangeQuestionButton extends StatelessWidget {
         ),
         child: const Icon(Icons.keyboard_arrow_right_rounded),
         onPressed: () {
-          context.read<QuestionsCubit>().onQuestionNext();
+          context
+              .read<QuestionsCubit>()
+              .onQuestionNextOrPrevious((currentIndex) => currentIndex + 1);
         });
     final previousButton = ElevatedButton(
         style: const ButtonStyle(
@@ -25,7 +27,9 @@ class ChangeQuestionButton extends StatelessWidget {
         ),
         child: const Icon(Icons.keyboard_arrow_left_rounded),
         onPressed: () {
-          context.read<QuestionsCubit>().onQuestionPrevious();
+          context
+              .read<QuestionsCubit>()
+              .onQuestionNextOrPrevious((currentIndex) => currentIndex - 1);
         });
 
     return BlocBuilder<QuestionsCubit, QuestionsState>(
