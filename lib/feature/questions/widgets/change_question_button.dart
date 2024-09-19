@@ -35,9 +35,9 @@ class ChangeQuestionButton extends StatelessWidget {
 
     return BlocBuilder<QuestionsCubit, QuestionsState>(
       buildWhen: (prev, curr) =>
-          prev.currentIndex != curr.currentIndex ||
-          prev.quizLength != curr.quizLength,
+          prev.currentIndex != curr.currentIndex || prev.question != curr.question,
       builder: (context, state) {
+        final quiz = state.quiz;
         if (state.currentIndex == 0) {
           return Align(
             alignment: Alignment.bottomRight,
@@ -50,16 +50,15 @@ class ChangeQuestionButton extends StatelessWidget {
               const SizedBox(width: 10.0),
               Expanded(
                 flex: 3,
-                child: BlocSelector<QuestionsCubit, QuestionsState, bool>(
-                  selector: (state) {
-                    return state.isAllAnswered;
-                  },
-                  builder: (context, state) => ElevatedButton(
-                    onPressed: state ? () {
-                      Navigator.of(context).pushReplacementNamed(ScoreScreen.route);
-                    } : null,
-                    child: const Text('Submit'),
-                  ),
+                child: ElevatedButton(
+                  onPressed: state.isAllAnswered
+                      ? () {
+                    Navigator.of(context).pushReplacementNamed(
+                        ScoreScreen.route,
+                        arguments: quiz);
+                  }
+                      : null,
+                  child: const Text('Submit'),
                 ),
               ),
               const Spacer(),
