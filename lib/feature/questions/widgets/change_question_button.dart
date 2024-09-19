@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quizz/feature/questions/cubit/questions_cubit.dart';
+import 'package:quizz/feature/score/presentation/score_screen.dart';
 
 class ChangeQuestionButton extends StatelessWidget {
   const ChangeQuestionButton({super.key});
@@ -54,7 +55,9 @@ class ChangeQuestionButton extends StatelessWidget {
                     return state.isAllAnswered;
                   },
                   builder: (context, state) => ElevatedButton(
-                    onPressed: state ? () {} : null,
+                    onPressed: state ? () {
+                      Navigator.of(context).pushReplacementNamed(ScoreScreen.route);
+                    } : null,
                     child: const Text('Submit'),
                   ),
                 ),
