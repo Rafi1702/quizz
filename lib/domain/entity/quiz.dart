@@ -12,7 +12,7 @@ class QuizEntity {
     this.answers,
     this.correctAnswers,
     this.multipleCorrectAnswer,
-    this.isAnswered,
+    this.isAnswered = false,
   });
 
   QuizEntity copyWith({

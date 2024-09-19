@@ -32,8 +32,7 @@ class QuestionCurrentNumber extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<QuestionsCubit, QuestionsState>(
       buildWhen: (prev, curr) =>
-          prev.currentIndex != curr.currentIndex ||
-          prev.quizLength != curr.quizLength,
+          prev.currentIndex != curr.currentIndex,
       builder: (context, state) {
         return Text(
           'Question: ${state.currentIndex + 1}/${state.quizLength}',
@@ -68,6 +67,7 @@ class TimerBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
       decoration: BoxDecoration(

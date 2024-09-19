@@ -31,7 +31,7 @@ class _NumberListState extends State<NumberList> {
         separatorBuilder: (context, index) => const SizedBox(width: 10.0),
         itemBuilder: (context, index) {
           return BlocListener<QuestionsCubit, QuestionsState>(
-            listenWhen: (prev, curr) => prev.currentIndex != curr.currentIndex,
+            listenWhen: (prev, curr) => prev.question != curr.question,
             listener: (context, state) {
               _animateToIndex(state.currentIndex, 70.0);
             },
@@ -45,10 +45,11 @@ class _NumberListState extends State<NumberList> {
                   child: Container(
                     width: 60.0,
                     decoration: BoxDecoration(
-                        // border: Border.all(
-                        //     color: state.shouldBeAnswerPerQuestion != state.totalAnsweredByUserPerQuestion
-                        //         ? Colors.red
-                        //         : Colors.transparent),
+                        border: Border.all(
+                          width: 1.0,
+                            color: state.quiz[index]!.isAnswered!
+                                ? Colors.red
+                                : Colors.transparent),
                         borderRadius: BorderRadius.circular(8.0),
                         color: state.currentIndex == index
                             ? Theme.of(context).colorScheme.primary

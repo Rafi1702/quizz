@@ -72,16 +72,30 @@ class QuestionsCubit extends Cubit<QuestionsState> {
   }
 
   void onAnswerSelected(int index) {
-    List<AnswerEntity>? updatedAnswer =
-        updatedAnswers(question: state.question, choicedIndex: index, shouldBeAnsweredPerQuestion: state.shouldBeAnswerPerQuestion);
+    List<AnswerEntity>? updatedAnswer = updatedAnswers(
+        question: state.question,
+        choicedIndex: index,
+        shouldBeAnsweredPerQuestion: state.shouldBeAnswerPerQuestion);
 
     final updatedChoice = state.question?.copyWith(
       answers: updatedAnswer,
     );
 
+    final totalAnsweredByUserPerQuestion = countAnswerPerQuestion<AnswerEntity>(
+        updatedChoice,
+        getItem: (item) => item.answers!,
+        select: (select) => select.isSelected!);
+
+    final shouldBeAnswerPerQuestion =
+        countAnswerPerQuestion<CorrectAnswersEntity>(updatedChoice,
+            getItem: (item) => item.correctAnswers!,
+            select: (select) => select.isCorrect!);
+
     final updatedQuiz = state.quiz.asMap().entries.map((e) {
       if (e.key == state.currentIndex) {
-        return updatedChoice;
+        return updatedChoice?.copyWith(
+            isAnswered:
+                totalAnsweredByUserPerQuestion == shouldBeAnswerPerQuestion);
       }
       return e.value;
     }).toList();
@@ -90,11 +104,6 @@ class QuestionsCubit extends Cubit<QuestionsState> {
             getItems: (item) => item.answers!,
             select: (select) => select.isSelected!) ==
         mustBeAnsweredForSubmit;
-
-    final totalAnsweredByUserPerQuestion = countAnswerPerQuestion<AnswerEntity>(
-        updatedQuiz[state.currentIndex],
-        getItem: (item) => item.answers!,
-        select: (select) => select.isSelected!);
 
     return emit(
       state.copyWith(
@@ -174,14 +183,22 @@ class QuestionsCubit extends Cubit<QuestionsState> {
   }
 
   List<AnswerEntity>? updatedAnswers(
-      {required QuizEntity? question, required int choicedIndex, required int shouldBeAnsweredPerQuestion}) {
+      {required QuizEntity? question,
+      required int choicedIndex,
+      required int shouldBeAnsweredPerQuestion}) {
     if (question == null) return question?.answers;
 
-    final answers = question?.answers;
+    final answers = question.answers;
     if (question.multipleCorrectAnswer!) {
-      var choicesMultiple = answers!.asMap().entries.where((e) => e.value.isSelected!).map((e) => e.key).toList();
-      return answers?.asMap().entries.map((e) {
-        if(choicesMultiple.length == shouldBeAnsweredPerQuestion && !choicesMultiple.contains(e.key)){
+      var choicesMultiple = answers!
+          .asMap()
+          .entries
+          .where((e) => e.value.isSelected!)
+          .map((e) => e.key)
+          .toList();
+      return answers.asMap().entries.map((e) {
+        if (choicesMultiple.length == shouldBeAnsweredPerQuestion &&
+            !choicesMultiple.contains(e.key)) {
           return e.value;
         }
         if (e.key == choicedIndex) {
