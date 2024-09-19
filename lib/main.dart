@@ -8,6 +8,7 @@ import 'package:quizz/feature/questions/presentation/questions_screen.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'domain/repository/quiz_repository.dart';
+import 'feature/score/presentation/score_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -46,6 +47,7 @@ class MyApp extends StatelessWidget {
       routes: {
         CategoryScreen.route: (context) => const CategoryScreen(),
         QuestionsScreen.route: (context) => const QuestionsScreen(),
+        ScoreScreen.route:(context)=> const ScoreScreen(),
       },
     );
   }

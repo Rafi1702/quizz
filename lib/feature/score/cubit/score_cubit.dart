@@ -1,8 +1,20 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:quizz/domain/entity/quiz.dart';
 
 part 'score_state.dart';
 
 class ScoreCubit extends Cubit<ScoreState> {
-  ScoreCubit() : super(ScoreState());
+  final List<QuizEntity?>answeredQuestion;
+  ScoreCubit({required this.answeredQuestion}) : super(ScoreState(
+    answeredQuestion: answeredQuestion
+  ));
+
+
+
+
+
+
+
 }
