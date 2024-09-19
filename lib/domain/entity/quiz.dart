@@ -1,16 +1,16 @@
 class QuizEntity {
   final int? id;
   final String? question;
-  final List<AnswerEntity>? answers;
-  final List<CorrectAnswersEntity>? correctAnswers;
+  final List<AnswerEntity> answers;
+  final List<CorrectAnswersEntity> correctAnswers;
   final bool? multipleCorrectAnswer;
-  final bool? isAnswered;
+  final bool isAnswered;
 
   const QuizEntity({
     this.id,
     this.question,
-    this.answers,
-    this.correctAnswers,
+    required this.answers,
+    required this.correctAnswers,
     this.multipleCorrectAnswer,
     this.isAnswered = false,
   });
@@ -39,14 +39,14 @@ class AnswerEntity {
   const AnswerEntity({this.answer, this.isSelected = false});
 
   final String? answer;
-  final bool? isSelected;
+  final bool isSelected;
 
   AnswerEntity copyWith({String? answer, bool? isSelected}) => AnswerEntity(
       answer: answer ?? this.answer, isSelected: isSelected ?? this.isSelected);
 }
 
 class CorrectAnswersEntity {
-  final bool? isCorrect;
+  final bool isCorrect;
 
-  const CorrectAnswersEntity({required this.isCorrect});
+  const CorrectAnswersEntity({this.isCorrect = false});
 }

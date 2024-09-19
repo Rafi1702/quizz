@@ -89,7 +89,7 @@ class QuestionsScreen extends StatelessWidget {
                       child: Column(
                         children: [
                           NumberList(),
-                          SizedBox(height: 10.0),
+                          SizedBox(height: 20.0),
                           QuestionExtra(),
                           SizedBox(height: 20.0),
                           Expanded(

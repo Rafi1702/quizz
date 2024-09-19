@@ -41,12 +41,12 @@ class QuizRepository {
             AnswerEntity(answer: e.answers?.answerF),
           ],
           correctAnswers: [
-            CorrectAnswersEntity(isCorrect: e.correctAnswers?.answerACorrect.getBool),
-            CorrectAnswersEntity(isCorrect: e.correctAnswers?.answerBCorrect.getBool),
-            CorrectAnswersEntity(isCorrect: e.correctAnswers?.answerCCorrect.getBool),
-            CorrectAnswersEntity(isCorrect: e.correctAnswers?.answerDCorrect.getBool),
-            CorrectAnswersEntity(isCorrect: e.correctAnswers?.answerECorrect.getBool),
-            CorrectAnswersEntity(isCorrect: e.correctAnswers?.answerFCorrect.getBool),
+            CorrectAnswersEntity(isCorrect: e.correctAnswers!.answerACorrect.getBool),
+            CorrectAnswersEntity(isCorrect: e.correctAnswers!.answerBCorrect.getBool),
+            CorrectAnswersEntity(isCorrect: e.correctAnswers!.answerCCorrect.getBool),
+            CorrectAnswersEntity(isCorrect: e.correctAnswers!.answerDCorrect.getBool),
+            CorrectAnswersEntity(isCorrect: e.correctAnswers!.answerECorrect.getBool),
+            CorrectAnswersEntity(isCorrect: e.correctAnswers!.answerFCorrect.getBool),
           ],
         );
       }).toList();

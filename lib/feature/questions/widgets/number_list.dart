@@ -22,50 +22,72 @@ class _NumberListState extends State<NumberList> {
 
   @override
   Widget build(BuildContext context) {
+    const containerWidth = 60.0;
+    const spaceBetweenContainer = 10.0;
     return SizedBox(
       height: 60.0,
       child: ListView.separated(
         itemCount: 20,
         controller: _scrollController,
         scrollDirection: Axis.horizontal,
-        separatorBuilder: (context, index) => const SizedBox(width: 10.0),
+        separatorBuilder: (context, index) => const SizedBox(width: spaceBetweenContainer),
         itemBuilder: (context, index) {
           return BlocListener<QuestionsCubit, QuestionsState>(
             listenWhen: (prev, curr) => prev.question != curr.question,
             listener: (context, state) {
-              _animateToIndex(state.currentIndex, 70.0);
+              _animateToIndex(
+                  state.currentIndex, containerWidth + spaceBetweenContainer);
             },
             child: BlocBuilder<QuestionsCubit, QuestionsState>(
               buildWhen: (prev, curr) => prev.currentIndex != curr.currentIndex,
               builder: (context, state) {
+                final isCurrentIndexEqualIndex = state.currentIndex == index;
+
+                final isAnswered = state.quiz[index]!.isAnswered;
                 return GestureDetector(
                   onTap: () => context
                       .read<QuestionsCubit>()
                       .onQuestionNextOrPrevious((_) => index),
                   child: Container(
-                    width: 60.0,
+                    width: containerWidth,
                     decoration: BoxDecoration(
-                        border: Border.all(
-                          width: 1.0,
-                            color: state.quiz[index]!.isAnswered!
-                                ? Colors.red
-                                : Colors.transparent),
                         borderRadius: BorderRadius.circular(8.0),
                         color: state.currentIndex == index
                             ? Theme.of(context).colorScheme.primary
                             : Theme.of(context).colorScheme.onSurface),
-                    child: Center(
-                      child: Text(
-                        '${index + 1}',
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineMedium!
-                            .copyWith(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onInverseSurface,
-                            ),
-                      ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          '${index + 1}',
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineMedium!
+                              .copyWith(
+                                fontWeight: isCurrentIndexEqualIndex
+                                    ? FontWeight.w900
+                                    : null,
+                                color: isCurrentIndexEqualIndex
+                                    ? Colors.white
+                                    : Theme.of(context)
+                                        .colorScheme
+                                        .onInverseSurface,
+                              ),
+                        ),
+                        isAnswered
+                            ? Expanded(
+                                child: Container(
+                                  width: 10.0,
+                                  height: 10.0,
+                                  decoration: BoxDecoration(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primaryContainer,
+                                      shape: BoxShape.circle),
+                                ),
+                              )
+                            : const SizedBox.shrink(),
+                      ],
                     ),
                   ),
                 );
