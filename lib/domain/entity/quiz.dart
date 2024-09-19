@@ -5,6 +5,7 @@ class QuizEntity {
   final List<CorrectAnswersEntity> correctAnswers;
   final bool? multipleCorrectAnswer;
   final bool isAnswered;
+  final bool isCorrect;
 
   const QuizEntity({
     this.id,
@@ -13,6 +14,7 @@ class QuizEntity {
     required this.correctAnswers,
     this.multipleCorrectAnswer,
     this.isAnswered = false,
+    this.isCorrect = false,
   });
 
   QuizEntity copyWith({
