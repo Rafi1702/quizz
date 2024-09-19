@@ -1,13 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quizz/domain/entity/quiz.dart';
 import 'package:quizz/domain/repository/quiz_repository.dart';
 import 'package:quizz/feature/category/presentation/category_screen.dart';
-import 'package:quizz/feature/questions/cubit/questions_cubit.dart';
-import 'package:quizz/feature/questions/widgets/change_question_button.dart';
-import 'package:quizz/feature/questions/widgets/number_list.dart';
-import 'package:quizz/feature/questions/widgets/question_extra.dart';
-import 'package:quizz/feature/questions/widgets/question_section.dart';
+import 'package:quizz/feature/questions/barrel.dart';
+
 
 class QuestionsScreen extends StatelessWidget {
   static const route = '/questions';
@@ -117,7 +112,7 @@ class QuestionsScreen extends StatelessWidget {
                                   category: arguments.category,
                                   difficulty: arguments.difficulty);
                             },
-                            child: Text('Load Data')),
+                            child: const Text('Load Data')),
                       ],
                     ));
                   default:
