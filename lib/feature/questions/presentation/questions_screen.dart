@@ -17,27 +17,24 @@ class QuestionsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final arguments =
-    ModalRoute
-        .of(context)!
-        .settings
-        .arguments as QuestionScreenArgument;
+        ModalRoute.of(context)!.settings.arguments as QuestionScreenArgument;
 
     return BlocProvider(
       create: (context) =>
-      QuestionsCubit(quizRepository: context.read<QuizRepository>())
-        ..getQuestions(
-            category: arguments.category, difficulty: arguments.difficulty),
+          QuestionsCubit(quizRepository: context.read<QuizRepository>())
+            ..getQuestions(
+                category: arguments.category, difficulty: arguments.difficulty),
       child: BlocListener<QuestionsCubit, QuestionsState>(
-        listenWhen: (prev, curr)=> prev.isTimesUp != curr.isTimesUp,
+        listenWhen: (prev, curr) => prev.isTimesUp != curr.isTimesUp,
         listener: (context, state) {
-          if(state.isTimesUp){
+          if (state.isTimesUp) {
             Navigator.of(context).pop();
           }
         },
         child: Scaffold(
           appBar: AppBar(
             leading:
-            BlocSelector<QuestionsCubit, QuestionsState, List<QuizEntity?>>(
+                BlocSelector<QuestionsCubit, QuestionsState, List<QuizEntity?>>(
               selector: (state) {
                 return state.quiz;
               },
@@ -54,15 +51,19 @@ class QuestionsScreen extends StatelessWidget {
                             content: const Text(
                                 'Your answer is not saved when you quit'),
                             actions: [
-                              ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.of(context).popUntil(
-                                        ModalRoute.withName(
-                                            CategoryScreen.route));
-                                  },
-                                  child: const Text('Yes')),
-                              ElevatedButton(
-                                  onPressed: () {}, child: const Text('No'))
+                              TextButton(
+                                onPressed: () => Navigator.of(context).popUntil(
+                                    ModalRoute.withName(CategoryScreen.route)),
+                                child: const Text(
+                                  'Yes',
+                                  style: TextStyle(color: Colors.redAccent),
+                                ),
+                              ),
+                              TextButton(
+                                  onPressed: () => Navigator.of(context).pop(),
+                                  child: const Text(
+                                    'No',
+                                  ))
                             ],
                           );
                         });
@@ -104,21 +105,21 @@ class QuestionsScreen extends StatelessWidget {
                   case QuestionsStatus.error:
                     return Center(
                         child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(
-                              Icons.refresh_rounded,
-                              size: 80.0,
-                            ),
-                            ElevatedButton(
-                                onPressed: () {
-                                  context.read<QuestionsCubit>().getQuestions(
-                                      category: arguments.category,
-                                      difficulty: arguments.difficulty);
-                                },
-                                child: Text('Load Data')),
-                          ],
-                        ));
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          Icons.refresh_rounded,
+                          size: 80.0,
+                        ),
+                        ElevatedButton(
+                            onPressed: () {
+                              context.read<QuestionsCubit>().getQuestions(
+                                  category: arguments.category,
+                                  difficulty: arguments.difficulty);
+                            },
+                            child: Text('Load Data')),
+                      ],
+                    ));
                   default:
                     return Container();
                 }

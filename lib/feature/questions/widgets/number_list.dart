@@ -24,23 +24,24 @@ class _NumberListState extends State<NumberList> {
   Widget build(BuildContext context) {
     const containerWidth = 60.0;
     const spaceBetweenContainer = 10.0;
-    return SizedBox(
-      height: 60.0,
-      child: ListView.separated(
-        itemCount: 20,
-        controller: _scrollController,
-        scrollDirection: Axis.horizontal,
-        separatorBuilder: (context, index) => const SizedBox(width: spaceBetweenContainer),
-        itemBuilder: (context, index) {
-          return BlocListener<QuestionsCubit, QuestionsState>(
-            listenWhen: (prev, curr) => prev.question != curr.question,
-            listener: (context, state) {
-              _animateToIndex(
-                  state.currentIndex, containerWidth + spaceBetweenContainer);
-            },
-            child: BlocBuilder<QuestionsCubit, QuestionsState>(
-              buildWhen: (prev, curr) => prev.currentIndex != curr.currentIndex,
-              builder: (context, state) {
+    return BlocListener<QuestionsCubit, QuestionsState>(
+      listenWhen: (prev, curr) => prev.currentIndex != curr.currentIndex,
+      listener: (context, state) {
+        _animateToIndex(
+            state.currentIndex, containerWidth + spaceBetweenContainer);
+      },
+      child: BlocBuilder<QuestionsCubit, QuestionsState>(
+        buildWhen: (prev, curr) => prev.question != curr.question,
+        builder: (context, state) {
+          return SizedBox(
+            height: 60.0,
+            child: ListView.separated(
+              itemCount: state.quiz.length,
+              controller: _scrollController,
+              scrollDirection: Axis.horizontal,
+              separatorBuilder: (context, index) =>
+                  const SizedBox(width: spaceBetweenContainer),
+              itemBuilder: (context, index) {
                 final isCurrentIndexEqualIndex = state.currentIndex == index;
 
                 final isAnswered = state.quiz[index]!.isAnswered;
