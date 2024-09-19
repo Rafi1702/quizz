@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:meta/meta.dart';
 import 'package:quizz/domain/entity/quiz.dart';
 import 'package:quizz/domain/repository/quiz_repository.dart';
 

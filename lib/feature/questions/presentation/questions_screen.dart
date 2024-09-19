@@ -106,6 +106,7 @@ class QuestionsScreen extends StatelessWidget {
                           Icons.refresh_rounded,
                           size: 80.0,
                         ),
+                        Text(state.errorMessage),
                         ElevatedButton(
                             onPressed: () {
                               context.read<QuestionsCubit>().getQuestions(

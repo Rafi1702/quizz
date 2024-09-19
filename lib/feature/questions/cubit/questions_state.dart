@@ -2,6 +2,7 @@ part of 'questions_cubit.dart';
 
 enum QuestionsStatus { initial, loading, success, error }
 
+@immutable
 class QuestionsState extends Equatable {
   const QuestionsState(
       {this.duration = 3600,
