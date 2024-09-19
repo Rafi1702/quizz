@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quizz/domain/entity/quiz.dart';
+import 'package:quizz/feature/questions/barrel.dart';
 import 'package:quizz/feature/score/cubit/score_cubit.dart';
 import 'package:quizz/feature/score/widgets/answered_question.list.dart';
 
@@ -12,9 +13,9 @@ class ScoreScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final arguments =
-        ModalRoute.of(context)!.settings.arguments as List<QuizEntity?>;
+        ModalRoute.of(context)!.settings.arguments as ScoreScreenArgument;
     return BlocProvider(
-      create: (context) => ScoreCubit(answeredQuestion: arguments),
+      create: (context) => ScoreCubit(answeredQuestion: arguments.answeredQuestion, actualQuiz: arguments.actualQuiz),
       child: Scaffold(
         appBar: AppBar(title: const Text('Score')),
         body: const SafeArea(

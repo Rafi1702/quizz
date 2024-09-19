@@ -50,6 +50,7 @@ class QuestionsCubit extends Cubit<QuestionsState> {
       emit(state.copyWith(
         status: QuestionsStatus.success,
         question: question,
+        fixedQuiz: quiz,
         quiz: quiz,
         quizLength: quiz.length,
         shouldBeAnswerPerQuestion: shouldBeAnswerPerQuestion,

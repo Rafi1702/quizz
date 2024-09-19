@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quizz/feature/score/cubit/score_cubit.dart';
+import 'package:quizz/feature/score/presentation/question_review_screen.dart';
 
 class AnsweredQuestionList extends StatelessWidget {
   const AnsweredQuestionList({super.key});
@@ -13,20 +14,27 @@ class AnsweredQuestionList extends StatelessWidget {
           shrinkWrap: true,
           itemBuilder: (context, index) {
             final answeredQuestion = state.answeredQuestion[index];
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  width: 10.0,
-                  child: Center(
-                    child: FittedBox(
-                        fit: index > 9 ? BoxFit.scaleDown : BoxFit.none,
-                        child: Text('${index + 1}.')),
+            return GestureDetector(
+              onTap:(){
+                Navigator.of(context).push(MaterialPageRoute(builder: (context)=>
+                    QuestionReviewScreen(answeredQuestion: answeredQuestion),
+                ));
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    width: 10.0,
+                    child: Center(
+                      child: FittedBox(
+                          fit: index > 9 ? BoxFit.scaleDown : BoxFit.none,
+                          child: Text('${index + 1}.')),
+                    ),
                   ),
-                ),
-                Text(answeredQuestion!.isAnswered ? 'Answered' : 'Not Answered'),
-                const SizedBox.shrink(),
-              ],
+                  Text(answeredQuestion!.isAnswered ? 'Answered' : 'Not Answered'),
+                  const SizedBox.shrink(),
+                ],
+              ),
             );
           },
           separatorBuilder: (context, index) => const Divider(height: 50),

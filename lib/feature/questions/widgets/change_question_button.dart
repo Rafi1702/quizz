@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quizz/domain/entity/quiz.dart';
 import 'package:quizz/feature/questions/cubit/questions_cubit.dart';
 import 'package:quizz/feature/score/presentation/score_screen.dart';
+
+class ScoreScreenArgument {
+  final List<QuizEntity?> answeredQuestion;
+  final List<QuizEntity?> actualQuiz;
+
+  const ScoreScreenArgument(
+      {required this.answeredQuestion, required this.actualQuiz});
+}
 
 class ChangeQuestionButton extends StatelessWidget {
   const ChangeQuestionButton({super.key});
@@ -35,9 +44,9 @@ class ChangeQuestionButton extends StatelessWidget {
 
     return BlocBuilder<QuestionsCubit, QuestionsState>(
       buildWhen: (prev, curr) =>
-          prev.currentIndex != curr.currentIndex || prev.question != curr.question,
+          prev.currentIndex != curr.currentIndex ||
+          prev.question != curr.question,
       builder: (context, state) {
-        final quiz = state.quiz;
         if (state.currentIndex == 0) {
           return Align(
             alignment: Alignment.bottomRight,
@@ -53,10 +62,12 @@ class ChangeQuestionButton extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: state.isAllAnswered
                       ? () {
-                    Navigator.of(context).pushReplacementNamed(
-                        ScoreScreen.route,
-                        arguments: quiz);
-                  }
+                          Navigator.of(context).pushReplacementNamed(
+                              ScoreScreen.route,
+                              arguments: ScoreScreenArgument(
+                                  answeredQuestion: state.quiz,
+                                  actualQuiz: state.fixedQuiz));
+                        }
                       : null,
                   child: const Text('Submit'),
                 ),
