@@ -1,30 +1,34 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:quizz/domain/entity/quiz.dart';
+import 'package:quizz/domain/model/quiz.dart';
 
 part 'score_state.dart';
 
 class ScoreCubit extends Cubit<ScoreState> {
-  final List<QuizEntity?> answeredQuestion;
+  final List<Quiz?> answeredQuestion;
 
   ScoreCubit({required this.answeredQuestion})
       : super(ScoreState(answeredQuestion: answeredQuestion));
 
   void countQuizScore() {
-    final questions = List<QuizEntity>.from(state.answeredQuestion).map((e) {
-      e = e.copyWith(
-        correctness: _updateQuestionCorrectness(e),
+    final questions =
+        List<Quiz>.from(state.answeredQuestion).map((question) {
+      return question.copyWith(
+        correctness: _updateQuestionCorrectness(question),
+        scorePoint: countScorePoint(question),
       );
-
-      return e;
     }).toList();
 
-    return emit(state.copyWith(answeredQuestion: questions));
+    final finalScore = countFinalScore(questions);
+    print(finalScore);
+
+    return emit(
+        state.copyWith(answeredQuestion: questions, finalScore: finalScore));
   }
 
   //helper
-  QuizCorrectness _updateQuestionCorrectness(QuizEntity question) {
+  QuizCorrectness _updateQuestionCorrectness(Quiz question) {
     var shouldAnswer = 0;
 
     var correctness = QuizCorrectness.notCorrect;
@@ -48,5 +52,25 @@ class ScoreCubit extends Cubit<ScoreState> {
     }
 
     return correctness;
+  }
+
+  double countScorePoint(Quiz quiz) {
+    var score = 0.0;
+    for (int i = 0; i < 5; i++) {
+      if (quiz.answers[i].isSelected && quiz.correctAnswers[i].isCorrect) {
+        if (quiz.multipleCorrectAnswer!) {
+          score += 0.5;
+        } else {
+          score += 1;
+        }
+      }
+    }
+
+    return score;
+  }
+
+  double countFinalScore(List<Quiz> questions) {
+    var initialValue = 0.0;
+    return questions.fold(initialValue, (value, e) => value + e.scorePoint);
   }
 }

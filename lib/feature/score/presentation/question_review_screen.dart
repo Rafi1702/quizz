@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:quizz/domain/entity/quiz.dart';
+import 'package:quizz/domain/model/quiz.dart';
 
 class QuestionReviewScreen extends StatelessWidget {
-  final QuizEntity answeredQuestion;
+  final Quiz answeredQuestion;
 
   const QuestionReviewScreen({
     super.key,
@@ -64,7 +64,7 @@ class QuestionReviewScreen extends StatelessWidget {
         ));
   }
 
-  Color answerBoxColor(AnswerEntity answer, CorrectAnswersEntity correctAnswer,
+  Color answerBoxColor(Answer answer, CorrectAnswer correctAnswer,
       BuildContext context) {
     if (answer.isSelected) {
       if (answer.isSelected && correctAnswer.isCorrect) {

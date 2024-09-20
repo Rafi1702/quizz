@@ -4,19 +4,27 @@ enum ScoreStatus { initial, loading, success, error }
 
 @immutable
 class ScoreState extends Equatable {
-  const ScoreState(
-      {this.answeredQuestion = const [], this.status = ScoreStatus.initial});
+  const ScoreState({
+    this.answeredQuestion = const [],
+    this.status = ScoreStatus.initial,
+    this.finalScore = 0.0,
+  });
 
-  final List<QuizEntity?> answeredQuestion;
+  final List<Quiz?> answeredQuestion;
   final ScoreStatus status;
+  final double finalScore;
 
   ScoreState copyWith(
-      {List<QuizEntity?>? answeredQuestion, ScoreStatus? status}) {
+      {List<Quiz?>? answeredQuestion,
+      ScoreStatus? status,
+      double? finalScore}) {
     return ScoreState(
-        answeredQuestion: answeredQuestion ?? this.answeredQuestion,
-        status: status ?? this.status);
+      answeredQuestion: answeredQuestion ?? this.answeredQuestion,
+      status: status ?? this.status,
+      finalScore: finalScore ?? this.finalScore,
+    );
   }
 
   @override
-  List<Object?> get props => [answeredQuestion, status];
+  List<Object?> get props => [answeredQuestion, status, finalScore];
 }

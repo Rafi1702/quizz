@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:quizz/domain/entity/quiz.dart';
-import 'package:quizz/domain/repository/quiz_repository.dart';
 
+import 'package:quizz/domain/repository/quiz_repository.dart';
+import 'package:quizz/domain/model/quiz.dart';
 part 'questions_state.dart';
 
 class QuestionsCubit extends Cubit<QuestionsState> {
@@ -32,14 +32,14 @@ class QuestionsCubit extends Cubit<QuestionsState> {
       final updatedAnswerPerQuestionQuiz = quiz.map((e) {
         e = e.copyWith(
           shouldBeAnswerPerQuestion:
-          countAnswerPerQuestion<CorrectAnswersEntity>(e,
+          countAnswerPerQuestion<CorrectAnswer>(e,
               getItem: (item) => item.correctAnswers,
               select: (select) => select.isCorrect),
         );
         return e;
       }).toList();
 
-      mustBeAnsweredForSubmit = countTotalAnswer<CorrectAnswersEntity>(
+      mustBeAnsweredForSubmit = countTotalAnswer<CorrectAnswer>(
         quiz,
         getItems: (item) => item.correctAnswers,
         select: (select) => select.isCorrect,
@@ -71,7 +71,7 @@ class QuestionsCubit extends Cubit<QuestionsState> {
   }
 
   void onAnswerSelected(int index) {
-    List<AnswerEntity>? updatedAnswer = updatedAnswers(
+    List<Answer>? updatedAnswer = updatedAnswers(
       question: state.question,
       choicedIndex: index,
     );
@@ -81,7 +81,7 @@ class QuestionsCubit extends Cubit<QuestionsState> {
     );
 
     final updatedTotalAnsweredByUserPerQuestion = updatedChoice?.copyWith(
-      totalAnsweredByUserPerQuestion: countAnswerPerQuestion<AnswerEntity>(
+      totalAnsweredByUserPerQuestion: countAnswerPerQuestion<Answer>(
           updatedChoice,
           getItem: (item) => item.answers,
           select: (select) => select.isSelected),
@@ -99,7 +99,7 @@ class QuestionsCubit extends Cubit<QuestionsState> {
       return e.value;
     }).toList();
 
-    var isAllAnswered = countTotalAnswer<AnswerEntity>(updatedQuiz,
+    var isAllAnswered = countTotalAnswer<Answer>(updatedQuiz,
         getItems: (item) => item.answers,
         select: (select) => select.isSelected) ==
         mustBeAnsweredForSubmit;
@@ -133,8 +133,8 @@ class QuestionsCubit extends Cubit<QuestionsState> {
   }
 
   //helper
-  int countTotalAnswer<T>(List<QuizEntity?> quiz, {
-    required List<T> Function(QuizEntity) getItems,
+  int countTotalAnswer<T>(List<Quiz?> quiz, {
+    required List<T> Function(Quiz) getItems,
     required bool Function(T) select,
   }) {
     int counter = 0;
@@ -149,8 +149,8 @@ class QuestionsCubit extends Cubit<QuestionsState> {
     return counter;
   }
 
-  int countAnswerPerQuestion<T>(QuizEntity? question, {
-    required List<T> Function(QuizEntity) getItem,
+  int countAnswerPerQuestion<T>(Quiz? question, {
+    required List<T> Function(Quiz) getItem,
     required bool Function(T) select,
   }) {
     if (question == null) {
@@ -168,20 +168,21 @@ class QuestionsCubit extends Cubit<QuestionsState> {
     return counter;
   }
 
-  List<AnswerEntity>? updatedAnswers({
-    required QuizEntity? question,
+  List<Answer>? updatedAnswers({
+    required Quiz? question,
     required int choicedIndex,
   }) {
     if (question == null) return question?.answers;
 
     final answers = question.answers;
-    if (question.multipleCorrectAnswer!) {
+    if (question.multipleCorrectAnswer) {
       var choicesMultiple = answers
           .asMap()
           .entries
           .where((e) => e.value.isSelected)
           .map((e) => e.key)
           .toList();
+
       return answers
           .asMap()
           .entries

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quizz/domain/entity/quiz.dart';
+import 'package:quizz/domain/model/quiz.dart';
 import 'package:quizz/domain/repository/quiz_repository.dart';
 import 'package:quizz/feature/category/presentation/category_screen.dart';
 import 'package:quizz/feature/questions/barrel.dart';
@@ -31,7 +31,7 @@ class QuestionsScreen extends StatelessWidget {
         child: Scaffold(
           appBar: AppBar(
             leading:
-                BlocSelector<QuestionsCubit, QuestionsState, List<QuizEntity?>>(
+                BlocSelector<QuestionsCubit, QuestionsState, List<Quiz?>>(
               selector: (state) {
                 return state.quiz;
               },

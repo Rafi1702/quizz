@@ -4,41 +4,44 @@ enum QuizCorrectness {
   fullCorrect,
 }
 
-class QuizEntity {
+class Quiz {
   final int? id;
   final String? question;
-  final List<AnswerEntity> answers;
-  final List<CorrectAnswersEntity> correctAnswers;
-  final bool? multipleCorrectAnswer;
+  final List<Answer> answers;
+  final List<CorrectAnswer> correctAnswers;
+  final bool multipleCorrectAnswer;
   final bool isAnswered;
   final QuizCorrectness correctness;
   final int shouldBeAnswerPerQuestion;
   final int totalAnsweredByUserPerQuestion;
+  final double scorePoint;
 
-  const QuizEntity({
+  const Quiz({
     this.id,
     this.question,
     required this.answers,
     required this.correctAnswers,
-    this.multipleCorrectAnswer,
+    this.multipleCorrectAnswer = false,
     this.isAnswered = false,
     this.correctness = QuizCorrectness.notCorrect,
     this.shouldBeAnswerPerQuestion = 0,
     this.totalAnsweredByUserPerQuestion = 0,
+    this.scorePoint = 0.0,
   });
 
-  QuizEntity copyWith({
+  Quiz copyWith({
     int? id,
     String? question,
-    List<AnswerEntity>? answers,
-    List<CorrectAnswersEntity>? correctAnswers,
+    List<Answer>? answers,
+    List<CorrectAnswer>? correctAnswers,
     bool? multipleCorrectAnswer,
     bool? isAnswered,
     QuizCorrectness? correctness,
     int? shouldBeAnswerPerQuestion,
     int? totalAnsweredByUserPerQuestion,
+    double? scorePoint,
   }) {
-    return QuizEntity(
+    return Quiz(
       id: id ?? this.id,
       question: question ?? this.question,
       answers: answers ?? this.answers,
@@ -49,22 +52,23 @@ class QuizEntity {
       correctness: correctness ?? this.correctness,
       shouldBeAnswerPerQuestion: shouldBeAnswerPerQuestion??this.shouldBeAnswerPerQuestion,
       totalAnsweredByUserPerQuestion: totalAnsweredByUserPerQuestion??this.totalAnsweredByUserPerQuestion,
+      scorePoint: scorePoint??this.scorePoint,
     );
   }
 }
 
-class AnswerEntity {
-  const AnswerEntity({this.answer, this.isSelected = false});
+class Answer {
+  const Answer({this.answer, this.isSelected = false});
 
   final String? answer;
   final bool isSelected;
 
-  AnswerEntity copyWith({String? answer, bool? isSelected}) => AnswerEntity(
+  Answer copyWith({String? answer, bool? isSelected}) => Answer(
       answer: answer ?? this.answer, isSelected: isSelected ?? this.isSelected);
 }
 
-class CorrectAnswersEntity {
+class CorrectAnswer {
   final bool isCorrect;
 
-  const CorrectAnswersEntity({this.isCorrect = false});
+  const CorrectAnswer({this.isCorrect = false});
 }

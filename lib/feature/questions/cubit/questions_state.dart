@@ -21,9 +21,9 @@ class QuestionsState extends Equatable {
   final int duration;
   final bool isTimesUp;
   final QuestionsStatus status;
-  final List<QuizEntity?> quiz;
-  final List<QuizEntity?> fixedQuiz;
-  final QuizEntity? question;
+  final List<Quiz?> quiz;
+  final List<Quiz?> fixedQuiz;
+  final Quiz? question;
   final int currentIndex;
   final int quizLength;
   final String errorMessage;
@@ -35,15 +35,15 @@ class QuestionsState extends Equatable {
     int? duration,
     bool? isTimesUp,
     QuestionsStatus? status,
-    List<QuizEntity?>? quiz,
-    QuizEntity? question,
+    List<Quiz?>? quiz,
+    Quiz? question,
     int? currentIndex,
     int? quizLength,
     bool? isAllAnswered,
     String? errorMessage,
     int? shouldBeAnswerPerQuestion,
     int? totalAnsweredByUserPerQuestion,
-    List<QuizEntity?>? fixedQuiz,
+    List<Quiz?>? fixedQuiz,
   }) =>
       QuestionsState(
         duration: duration ?? this.duration,
