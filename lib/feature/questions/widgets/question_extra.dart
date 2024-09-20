@@ -53,7 +53,7 @@ class TotalAnswer extends StatelessWidget {
         final question = state.question;
         if (question != null) {
           return question.multipleCorrectAnswer ?? false
-              ? Text('Multiple Choice: ${state.totalAnsweredByUserPerQuestion}/${state.shouldBeAnswerPerQuestion}')
+              ? Text('Multiple Choice: ${question.totalAnsweredByUserPerQuestion}/${question.shouldBeAnswerPerQuestion}')
               : const SizedBox.shrink();
         }
         return const SizedBox.shrink();

@@ -23,7 +23,7 @@ class QuestionSection extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               itemBuilder: (context, index) {
-                final answers = state.question?.answers?[index];
+                final answers = state.question?.answers[index];
 
                 if(answers?.answer != null){
                   return GestureDetector(
@@ -41,7 +41,7 @@ class QuestionSection extends StatelessWidget {
               },
               separatorBuilder: (context, index) =>
                   const SizedBox(height: 10.0),
-              itemCount: state.question!.answers!.length,
+              itemCount: state.question!.answers.length,
             ),
           ],
         );

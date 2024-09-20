@@ -1,3 +1,9 @@
+enum QuizCorrectness {
+  notCorrect,
+  halfCorrect,
+  fullCorrect,
+}
+
 class QuizEntity {
   final int? id;
   final String? question;
@@ -5,7 +11,9 @@ class QuizEntity {
   final List<CorrectAnswersEntity> correctAnswers;
   final bool? multipleCorrectAnswer;
   final bool isAnswered;
-  final bool isCorrect;
+  final QuizCorrectness correctness;
+  final int shouldBeAnswerPerQuestion;
+  final int totalAnsweredByUserPerQuestion;
 
   const QuizEntity({
     this.id,
@@ -14,7 +22,9 @@ class QuizEntity {
     required this.correctAnswers,
     this.multipleCorrectAnswer,
     this.isAnswered = false,
-    this.isCorrect = false,
+    this.correctness = QuizCorrectness.notCorrect,
+    this.shouldBeAnswerPerQuestion = 0,
+    this.totalAnsweredByUserPerQuestion = 0,
   });
 
   QuizEntity copyWith({
@@ -24,15 +34,21 @@ class QuizEntity {
     List<CorrectAnswersEntity>? correctAnswers,
     bool? multipleCorrectAnswer,
     bool? isAnswered,
+    QuizCorrectness? correctness,
+    int? shouldBeAnswerPerQuestion,
+    int? totalAnsweredByUserPerQuestion,
   }) {
     return QuizEntity(
       id: id ?? this.id,
       question: question ?? this.question,
       answers: answers ?? this.answers,
-      isAnswered: isAnswered??this.isAnswered,
+      isAnswered: isAnswered ?? this.isAnswered,
       correctAnswers: correctAnswers ?? this.correctAnswers,
       multipleCorrectAnswer:
           multipleCorrectAnswer ?? this.multipleCorrectAnswer,
+      correctness: correctness ?? this.correctness,
+      shouldBeAnswerPerQuestion: shouldBeAnswerPerQuestion??this.shouldBeAnswerPerQuestion,
+      totalAnsweredByUserPerQuestion: totalAnsweredByUserPerQuestion??this.totalAnsweredByUserPerQuestion,
     );
   }
 }

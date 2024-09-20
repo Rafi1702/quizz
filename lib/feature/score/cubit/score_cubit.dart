@@ -13,13 +13,7 @@ class ScoreCubit extends Cubit<ScoreState> {
 
   void countQuizScore() {
     final questions = List<QuizEntity>.from(state.answeredQuestion).map((e) {
-      for (int i = 0; i < e!.correctAnswers.length; i++) {
-        if (e.correctAnswers[i].isCorrect && e.answers[i].isSelected) {
-          e = e.copyWith(correctness: QuizCorrectness.fullCorrect);
-        } else {
-          e = e.copyWith(correctness: QuizCorrectness.fullCorrect);
-        }
-      }
+      e = updateQuestionCorrectness(e);
       return e;
     }).toList();
 
@@ -28,15 +22,28 @@ class ScoreCubit extends Cubit<ScoreState> {
 }
 
 //helper
-List<QuizEntity?> correctnessUpdate(List<QuizEntity?> answeredQuestion) {
-  var temp = answeredQuestion;
-  for (var e in temp) {
-    for (int i = 0; i < e!.correctAnswers.length; i++) {
-      if (e.correctAnswers[i].isCorrect && e.answers[i].isSelected) {
-        e.copyWith(correctness: QuizCorrectness.fullCorrect);
-      } else {
-        e.copyWith(correctness: QuizCorrectness.notCorrect);
+QuizEntity updateQuestionCorrectness(QuizEntity question) {
+  var temp = question;
+
+  if (!temp.multipleCorrectAnswer!) {
+    for (int i = 0; i < temp.correctAnswers.length; i++) {
+      if (temp.correctAnswers[i].isCorrect && temp.answers[i].isSelected) {
+        temp = temp.copyWith(correctness: QuizCorrectness.fullCorrect);
       }
+    }
+  }
+  else{
+    var shouldAnswer = 0;
+    for(int i = 0;i<temp.correctAnswers.length;i++){
+      bool correctCondition = temp.correctAnswers[i].isCorrect && temp.answers[i].isSelected;
+      if(correctCondition && shouldAnswer>=temp.shouldBeAnswerPerQuestion){
+        temp = temp.copyWith(correctness: QuizCorrectness.fullCorrect);
+      }
+      else if(correctCondition){
+        shouldAnswer +=1;
+        temp = temp.copyWith(correctness: QuizCorrectness.halfCorrect);
+      }
+
     }
   }
   return temp;

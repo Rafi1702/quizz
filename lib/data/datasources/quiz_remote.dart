@@ -19,7 +19,7 @@ class QuizApi {
     try {
       final response = await http.get(
           Uri.parse(
-              '$url/questions?category=$category&difficulty=$difficulty&limit=10'),
+              '$url/questions?category=$category&difficulty=$difficulty&limit=5'),
           headers: {
             'x-api-key': key ?? 'none',
           }).timeout(const Duration(seconds: 3));
