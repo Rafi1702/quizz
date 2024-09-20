@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quizz/domain/entity/quiz.dart';
 import 'package:quizz/feature/score/cubit/score_cubit.dart';
 import 'package:quizz/feature/score/presentation/question_review_screen.dart';
 
@@ -32,7 +33,7 @@ class AnsweredQuestionList extends StatelessWidget {
                     ),
                   ),
                   Text(answeredQuestion!.isAnswered ? 'Answered' : 'Not Answered'),
-                  const SizedBox.shrink(),
+                  correctness(answeredQuestion.correctness, context),
                 ],
               ),
             );
@@ -40,5 +41,17 @@ class AnsweredQuestionList extends StatelessWidget {
           separatorBuilder: (context, index) => const Divider(height: 50),
           itemCount: state.answeredQuestion.length);
     });
+  }
+
+  Icon correctness(QuizCorrectness correctness, BuildContext context){
+    switch(correctness){
+      case QuizCorrectness.fullCorrect:
+       return Icon(Icons.check_circle, color: Theme.of(context).colorScheme.onSecondary);
+      case QuizCorrectness.notCorrect:
+        return Icon(Icons.close_rounded, color: Theme.of(context).colorScheme.onError);
+      case QuizCorrectness.halfCorrect:
+        return const Icon(Icons.warning_rounded, color: Colors.amber);
+    }
+
   }
 }

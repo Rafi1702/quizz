@@ -15,28 +15,39 @@ class ScoreScreen extends StatelessWidget {
     final arguments =
         ModalRoute.of(context)!.settings.arguments as ScoreScreenArgument;
     return BlocProvider(
-      create: (context) => ScoreCubit(answeredQuestion: arguments.answeredQuestion, actualQuiz: arguments.actualQuiz),
+      create: (context) =>
+          ScoreCubit(answeredQuestion: arguments.answeredQuestion)
+            ..countQuizScore(),
       child: Scaffold(
         appBar: AppBar(title: const Text('Score')),
-        body: const SafeArea(
+        body: SafeArea(
           child: SingleChildScrollView(
             child: Padding(
-              padding: EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(10.0),
               child: Column(
                 children: [
-                  Row(
+                  Builder(
+                    builder: (context) {
+                      return IconButton(
+                        icon: const Icon(Icons.refresh_rounded),
+                        onPressed: () =>
+                            context.read<ScoreCubit>()..countQuizScore(),
+                      );
+                    }
+                  ),
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('Correct Answer: 18/20'),
                       Text('Score: 90')
                     ],
                   ),
-                  Divider(
+                  const Divider(
                     thickness: 2.0,
                     color: Colors.white,
                   ),
-                  SizedBox(height: 20.0),
-                  AnsweredQuestionList(),
+                  const SizedBox(height: 20.0),
+                  const AnsweredQuestionList(),
                 ],
               ),
             ),

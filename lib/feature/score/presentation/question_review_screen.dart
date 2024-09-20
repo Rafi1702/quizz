@@ -25,7 +25,6 @@ class QuestionReviewScreen extends StatelessWidget {
                 separatorBuilder: (context, index) =>
                     const SizedBox(height: 10.0),
                 itemBuilder: (context, index) {
-                  print(answeredQuestion.correctAnswers[index].isCorrect);
                   return Container(
                     padding: const EdgeInsets.symmetric(
                         vertical: 20.0, horizontal: 8.0),
