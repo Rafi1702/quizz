@@ -12,19 +12,20 @@ class ScoreCubit extends Cubit<ScoreState> {
       : super(ScoreState(answeredQuestion: answeredQuestion));
 
   void countQuizScore() {
-    final questions =
-        List<Quiz>.from(state.answeredQuestion).map((question) {
+    final questions = List<Quiz>.from(state.answeredQuestion).map((question) {
       return question.copyWith(
         correctness: _updateQuestionCorrectness(question),
         scorePoint: countScorePoint(question),
       );
     }).toList();
 
-    final finalScore = countFinalScore(questions);
-    print(finalScore);
-
     return emit(
-        state.copyWith(answeredQuestion: questions, finalScore: finalScore));
+      state.copyWith(
+        answeredQuestion: questions,
+        finalScore: countFinalScore(questions),
+        totalCorrectAnswer: countTotalCorrectAnswer(questions),
+      ),
+    );
   }
 
   //helper
@@ -69,8 +70,15 @@ class ScoreCubit extends Cubit<ScoreState> {
     return score;
   }
 
-  double countFinalScore(List<Quiz> questions) {
+  int countFinalScore(List<Quiz> questions) {
     var initialValue = 0.0;
-    return questions.fold(initialValue, (value, e) => value + e.scorePoint);
+    return questions.fold(initialValue,
+        (value, e) => value + (e.scorePoint * (100 / questions.length))).floor();
+  }
+
+  int countTotalCorrectAnswer(List<Quiz> questions) {
+    return questions
+        .where((e) => e.correctness == QuizCorrectness.fullCorrect)
+        .length;
   }
 }

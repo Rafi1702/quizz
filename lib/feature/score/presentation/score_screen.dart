@@ -4,6 +4,7 @@ import 'package:quizz/domain/model/quiz.dart';
 import 'package:quizz/feature/questions/barrel.dart';
 import 'package:quizz/feature/score/cubit/score_cubit.dart';
 import 'package:quizz/feature/score/widgets/answered_question.list.dart';
+import 'package:quizz/feature/score/widgets/total_score.dart';
 
 class ScoreScreen extends StatelessWidget {
   static const route = '/score_screen';
@@ -26,22 +27,14 @@ class ScoreScreen extends StatelessWidget {
               padding: const EdgeInsets.all(10.0),
               child: Column(
                 children: [
-                  Builder(
-                    builder: (context) {
-                      return IconButton(
-                        icon: const Icon(Icons.refresh_rounded),
-                        onPressed: () =>
-                            context.read<ScoreCubit>()..countQuizScore(),
-                      );
-                    }
-                  ),
-                  const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Correct Answer: 18/20'),
-                      Text('Score: 90')
-                    ],
-                  ),
+                  Builder(builder: (context) {
+                    return IconButton(
+                      icon: const Icon(Icons.refresh_rounded),
+                      onPressed: () =>
+                          context.read<ScoreCubit>()..countQuizScore(),
+                    );
+                  }),
+                  const TotalScore(),
                   const Divider(
                     thickness: 2.0,
                     color: Colors.white,
