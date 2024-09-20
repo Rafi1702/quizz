@@ -93,8 +93,8 @@ class QuestionsCubit extends Cubit<QuestionsState> {
         .map((e) {
       if (e.key == state.currentIndex) {
         return updatedTotalAnsweredByUserPerQuestion?.copyWith(
-            isAnswered: e.value!.shouldBeAnswerPerQuestion ==
-                e.value!.shouldBeAnswerPerQuestion);
+            isAnswered: updatedTotalAnsweredByUserPerQuestion.totalAnsweredByUserPerQuestion ==
+                updatedTotalAnsweredByUserPerQuestion.shouldBeAnswerPerQuestion);
       }
       return e.value;
     }).toList();
