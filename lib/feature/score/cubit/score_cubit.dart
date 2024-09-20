@@ -13,38 +13,40 @@ class ScoreCubit extends Cubit<ScoreState> {
 
   void countQuizScore() {
     final questions = List<QuizEntity>.from(state.answeredQuestion).map((e) {
-      e = updateQuestionCorrectness(e);
+      e = e.copyWith(
+        correctness: _updateQuestionCorrectness(e),
+      );
+
       return e;
     }).toList();
 
     return emit(state.copyWith(answeredQuestion: questions));
   }
-}
 
-//helper
-QuizEntity updateQuestionCorrectness(QuizEntity question) {
-  var temp = question;
-
-  if (!temp.multipleCorrectAnswer!) {
-    for (int i = 0; i < temp.correctAnswers.length; i++) {
-      if (temp.correctAnswers[i].isCorrect && temp.answers[i].isSelected) {
-        temp = temp.copyWith(correctness: QuizCorrectness.fullCorrect);
-      }
-    }
-  }
-  else{
+  //helper
+  QuizCorrectness _updateQuestionCorrectness(QuizEntity question) {
     var shouldAnswer = 0;
-    for(int i = 0;i<temp.correctAnswers.length;i++){
-      bool correctCondition = temp.correctAnswers[i].isCorrect && temp.answers[i].isSelected;
-      if(correctCondition && shouldAnswer>=temp.shouldBeAnswerPerQuestion){
-        temp = temp.copyWith(correctness: QuizCorrectness.fullCorrect);
-      }
-      else if(correctCondition){
-        shouldAnswer +=1;
-        temp = temp.copyWith(correctness: QuizCorrectness.halfCorrect);
-      }
 
+    var correctness = QuizCorrectness.notCorrect;
+
+    for (int i = 0; i < question.correctAnswers.length; i++) {
+      final bool correctCondition = question.correctAnswers[i].isCorrect &&
+          question.answers[i].isSelected;
+      if (!question.multipleCorrectAnswer) {
+        if (correctCondition) {
+          correctness = QuizCorrectness.fullCorrect;
+        }
+      } else {
+        if (correctCondition &&
+            shouldAnswer >= question.shouldBeAnswerPerQuestion) {
+          correctness = QuizCorrectness.fullCorrect;
+        } else if (correctCondition) {
+          shouldAnswer += 1;
+          correctness = QuizCorrectness.halfCorrect;
+        }
+      }
     }
+
+    return correctness;
   }
-  return temp;
 }
