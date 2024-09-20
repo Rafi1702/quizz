@@ -65,10 +65,13 @@ class QuestionReviewScreen extends StatelessWidget {
         ));
   }
 
-  Color? answerBoxColor(AnswerEntity answer, CorrectAnswersEntity correctAnswer,
+  Color answerBoxColor(AnswerEntity answer, CorrectAnswersEntity correctAnswer,
       BuildContext context) {
     if (answer.isSelected) {
-      return Colors.purple;
+      if (answer.isSelected && correctAnswer.isCorrect) {
+        return Colors.purple;
+      }
+      return Colors.red;
     } else if (correctAnswer.isCorrect) {
       return Colors.green;
     } else {
