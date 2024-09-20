@@ -59,6 +59,13 @@ class CategoryImagePlaceholder extends StatelessWidget {
             borderRadius: BorderRadius.circular(8.0),
             child: Image.network(
               'https://placehold.co/400x250/jpg',
+              errorBuilder: (context, _, stackTrace) {
+                return const SizedBox(
+                  height: 250,
+                  width: 400,
+                  child: Center(child: Text('Error')),
+                );
+              },
             ),
           ),
           Positioned.fill(
