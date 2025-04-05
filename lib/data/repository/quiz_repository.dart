@@ -1,7 +1,5 @@
-import 'dart:io';
-
 import 'package:quizz/data/datasources/quiz_remote.dart';
-import 'package:quizz/data/models/quiz.dart';
+
 import 'package:quizz/domain/model/quiz.dart';
 
 extension on String? {
@@ -43,18 +41,12 @@ class QuizRepository {
           Answer(answer: e.answers?.answerF),
         ],
         correctAnswers: [
-          CorrectAnswer(
-              isCorrect: e.correctAnswers!.answerACorrect.getBool),
-          CorrectAnswer(
-              isCorrect: e.correctAnswers!.answerBCorrect.getBool),
-          CorrectAnswer(
-              isCorrect: e.correctAnswers!.answerCCorrect.getBool),
-          CorrectAnswer(
-              isCorrect: e.correctAnswers!.answerDCorrect.getBool),
-          CorrectAnswer(
-              isCorrect: e.correctAnswers!.answerECorrect.getBool),
-          CorrectAnswer(
-              isCorrect: e.correctAnswers!.answerFCorrect.getBool),
+          CorrectAnswer(isCorrect: e.correctAnswers!.answerACorrect.getBool),
+          CorrectAnswer(isCorrect: e.correctAnswers!.answerBCorrect.getBool),
+          CorrectAnswer(isCorrect: e.correctAnswers!.answerCCorrect.getBool),
+          CorrectAnswer(isCorrect: e.correctAnswers!.answerDCorrect.getBool),
+          CorrectAnswer(isCorrect: e.correctAnswers!.answerECorrect.getBool),
+          CorrectAnswer(isCorrect: e.correctAnswers!.answerFCorrect.getBool),
         ],
       );
     }).toList();

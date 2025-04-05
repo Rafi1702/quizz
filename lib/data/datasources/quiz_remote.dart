@@ -16,10 +16,9 @@ class QuizApi {
 
   Future<List<QuizDto>> getQuiz(
       {required String category, required String difficulty}) async {
-    try {
       final response = await http.get(
           Uri.parse(
-              '$url/questions?category=$category&difficulty=$difficulty&limit=5'),
+              '$url/questions?category=$category&difficulty=$difficulty&limit=7'),
           headers: {
             'x-api-key': key ?? 'none',
           }).timeout(const Duration(seconds: 3));
@@ -33,8 +32,5 @@ class QuizApi {
       }
 
       throw HttpException(decodedResponse['error']);
-    } on SocketException catch (_) {
-      throw const SocketException('Check your internet connection');
-    }
   }
 }

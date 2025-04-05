@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quizz/feature/category/cubit/category_cubit.dart';
-import 'package:quizz/feature/category/cubit/category_cubit.dart';
-import 'package:quizz/feature/category/widgets/category_image_placeholder.dart';
+
+import 'package:quizz/feature/category/widgets/category_card.dart';
 
 class QuestionScreenArgument {
   final String difficulty;
@@ -28,16 +28,16 @@ class CategoryScreen extends StatelessWidget {
         body: SafeArea(
           child: SizedBox(
             child: BlocBuilder<CategoryCubit, CategoryState>(
-              buildWhen: (prev, curr) => prev.categories != curr.categories,
+              buildWhen: (prev, curr) => prev.quizzes != curr.quizzes,
               builder: (context, state) {
                 return ListView.separated(
                   padding: const EdgeInsets.symmetric(
                       vertical: 10.0, horizontal: 16.0),
-                  itemCount: state.categories.length,
+                  itemCount: state.quizzes.length,
                   separatorBuilder: (context, index) =>
                       const SizedBox(height: 10.0),
-                  itemBuilder: (context, index) => CategoryImagePlaceholder(
-                    category: state.categories[index],
+                  itemBuilder: (context, index) => CategoryCard(
+                    quiz: state.quizzes[index],
                     difficulties: state.difficulties,
                   ),
                 );

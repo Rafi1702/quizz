@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:quizz/feature/category/model/category_ui.dart';
 
 part 'category_state.dart';
 
@@ -10,27 +11,25 @@ class CategoryCubit extends Cubit<CategoryState> {
         );
 
   void initial() {
-    const categories = [
-      CategoryUIModels(category: 'Linux', difficulty: 'Easy'),
-      CategoryUIModels(category: 'Docker', difficulty: 'Easy'),
-      CategoryUIModels(category: 'Cloud', difficulty: 'Easy')
+    const quizzes = [
+      QuizUIModels(category: 'Linux', difficulty: 'Easy', imagePath: ''),
+      QuizUIModels(category: 'Docker', difficulty: 'Easy', imagePath: ''),
+      QuizUIModels(category: 'Cloud', difficulty: 'Easy', imagePath: '')
     ];
 
-    const difficulties = ['Easy', 'Medium', 'Hard'];
     return emit(
-      const CategoryState(categories: categories, difficulties: difficulties),
+      const CategoryState(quizzes: quizzes),
     );
   }
 
-  void changeCategoryDifficulty(String category, String difficulty){
-    final updatedCategories = state.categories.map((e) {
-      if(e.category == category){
+  void changeCategoryDifficulty(String category, String difficulty) {
+    final updatedCategories = state.quizzes.map((e) {
+      if (e.category == category) {
         return e.copyWith(difficulty: difficulty);
       }
       return e;
     }).toList();
 
-    emit(state.copyWith(categories: updatedCategories));
-
+    emit(state.copyWith(quizzes: updatedCategories));
   }
 }

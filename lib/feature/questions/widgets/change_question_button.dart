@@ -17,25 +17,29 @@ class ChangeQuestionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final nextButton = ElevatedButton(
+    final nextButton = FilledButton(
         style: const ButtonStyle(
           shape: WidgetStatePropertyAll(
             CircleBorder(),
           ),
         ),
-        child: const Icon(Icons.keyboard_arrow_right_rounded),
+        child: const Icon(
+          Icons.keyboard_arrow_right_rounded,
+        ),
         onPressed: () {
           context
               .read<QuestionsCubit>()
               .onQuestionNextOrPrevious((currentIndex) => currentIndex + 1);
         });
-    final previousButton = ElevatedButton(
+    final previousButton = FilledButton(
         style: const ButtonStyle(
           shape: WidgetStatePropertyAll(
             CircleBorder(),
           ),
         ),
-        child: const Icon(Icons.keyboard_arrow_left_rounded),
+        child: const Icon(
+          Icons.keyboard_arrow_left_rounded,
+        ),
         onPressed: () {
           context
               .read<QuestionsCubit>()

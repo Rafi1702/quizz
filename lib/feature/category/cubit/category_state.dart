@@ -1,33 +1,21 @@
 part of 'category_cubit.dart';
 
-class CategoryUIModels {
-  const CategoryUIModels({required this.category, required this.difficulty});
-
-  final String category;
-  final String difficulty;
-
-  CategoryUIModels copyWith({String? category, String? difficulty}) =>
-      CategoryUIModels(
-          category: category ?? this.category,
-          difficulty: difficulty ?? this.difficulty);
-}
-
 class CategoryState extends Equatable {
   const CategoryState({
-    this.categories = const [],
-    this.difficulties = const [],
+    this.quizzes = const [],
+    this.difficulties = const ['Easy', 'Medium', 'Hard'],
   });
 
-  final List<CategoryUIModels> categories;
+  final List<QuizUIModels> quizzes;
   final List<String> difficulties;
 
   CategoryState copyWith(
-          {List<CategoryUIModels>? categories, List<String>? difficulties}) =>
+          {List<QuizUIModels>? quizzes, List<String>? difficulties}) =>
       CategoryState(
-          categories: categories ?? this.categories,
+          quizzes: quizzes ?? this.quizzes,
           difficulties: difficulties ?? this.difficulties);
 
   @override
   // TODO: implement props
-  List<Object?> get props => [categories, difficulties];
+  List<Object?> get props => [quizzes, difficulties];
 }

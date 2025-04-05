@@ -11,6 +11,7 @@ class QuestionSection extends StatelessWidget {
     return BlocBuilder<QuestionsCubit, QuestionsState>(
       buildWhen: (prev, curr) => prev.question != curr.question,
       builder: (context, state) {
+        print(state.question!.question);
         return QuizReusable(
           question: state.question,
         );
@@ -27,13 +28,15 @@ class QuizReusable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (question != null) {
-      Column(
+      return Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             question?.question ?? 'Not Available',
-            style: Theme.of(context).textTheme.titleLarge,
+            style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
           ),
           const SizedBox(height: 40.0),
           ListView.separated(
@@ -42,13 +45,15 @@ class QuizReusable extends StatelessWidget {
             itemBuilder: (context, index) {
               final answers = question?.answers[index];
 
-              if (answers?.answer != null) {
+              if (answers != null) {
                 return GestureDetector(
                   onTap: () =>
                       context.read<QuestionsCubit>().onAnswerSelected(index),
                   child: AnswerBox(
-                    answer: answers?.answer ?? 'Unavailable',
-                    isSelected: answers?.isSelected ?? false,
+                    answer: answers.answer ?? 'Unavailable',
+                    color: answers.isSelected
+                        ? Theme.of(context).colorScheme.onSecondary
+                        : Theme.of(context).colorScheme.onSurface,
                   ),
                 );
               }
@@ -65,10 +70,10 @@ class QuizReusable extends StatelessWidget {
 }
 
 class AnswerBox extends StatelessWidget {
-  const AnswerBox({super.key, required this.answer, required this.isSelected});
+  const AnswerBox({super.key, required this.answer, required this.color});
 
   final String answer;
-  final bool isSelected;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -77,9 +82,7 @@ class AnswerBox extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 8.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.0),
-        color: isSelected
-            ? Colors.purple
-            : Theme.of(context).colorScheme.onSurface,
+        color: color,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -87,12 +90,13 @@ class AnswerBox extends StatelessWidget {
           Expanded(
             child: Text(
               answer,
-              style: isSelected
+              // answer,
+              style: color == Theme.of(context).colorScheme.onSurface
                   ? answerTextTheme.copyWith(
-                      color: Theme.of(context).colorScheme.onSurface,
+                      color: Theme.of(context).colorScheme.onInverseSurface,
                     )
                   : answerTextTheme.copyWith(
-                      color: Theme.of(context).colorScheme.onInverseSurface,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
             ),
           ),

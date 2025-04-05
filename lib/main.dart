@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quizz/data/datasources/quiz_remote.dart';
-import 'package:quizz/feature/category/cubit/category_cubit.dart';
+import 'package:quizz/data/repository/quiz_repository.dart';
+
 import 'package:quizz/feature/category/presentation/category_screen.dart';
-import 'package:quizz/feature/questions/cubit/questions_cubit.dart';
+
 import 'package:quizz/feature/questions/presentation/questions_screen.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:quizz/theme/theme.dart';
 
-import 'domain/repository/quiz_repository.dart';
 import 'feature/score/presentation/score_screen.dart';
 
 void main() async {
@@ -30,24 +31,19 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         elevatedButtonTheme: ElevatedButtonThemeData(
             style: ButtonStyle(
-          backgroundColor:
-              WidgetStatePropertyAll(Theme.of(context).colorScheme.primary),
           shape: WidgetStatePropertyAll(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8.0),
             ),
           ),
         )),
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.deepPurple,
-          brightness: Brightness.dark,
-        ),
+        colorScheme: MaterialTheme.darkMediumContrastScheme(),
         useMaterial3: true,
       ),
       routes: {
         CategoryScreen.route: (context) => const CategoryScreen(),
         QuestionsScreen.route: (context) => const QuestionsScreen(),
-        ScoreScreen.route:(context)=> const ScoreScreen(),
+        ScoreScreen.route: (context) => const ScoreScreen(),
       },
     );
   }

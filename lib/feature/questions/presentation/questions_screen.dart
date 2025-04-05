@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:quizz/data/repository/quiz_repository.dart';
 import 'package:quizz/domain/model/quiz.dart';
-import 'package:quizz/domain/repository/quiz_repository.dart';
+
 import 'package:quizz/feature/category/presentation/category_screen.dart';
 import 'package:quizz/feature/questions/barrel.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 
 class QuestionsScreen extends StatelessWidget {
   static const route = '/questions';
@@ -30,8 +30,7 @@ class QuestionsScreen extends StatelessWidget {
         },
         child: Scaffold(
           appBar: AppBar(
-            leading:
-                BlocSelector<QuestionsCubit, QuestionsState, List<Quiz?>>(
+            leading: BlocSelector<QuestionsCubit, QuestionsState, List<Quiz?>>(
               selector: (state) {
                 return state.quiz;
               },

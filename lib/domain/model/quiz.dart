@@ -11,6 +11,8 @@ class Quiz {
   final List<CorrectAnswer> correctAnswers;
   final bool multipleCorrectAnswer;
   final bool isAnswered;
+
+  //added properties/field
   final QuizCorrectness correctness;
   final int shouldBeAnswerPerQuestion;
   final int totalAnsweredByUserPerQuestion;

@@ -30,9 +30,9 @@ class ScoreCubit extends Cubit<ScoreState> {
 
   //helper
   QuizCorrectness _updateQuestionCorrectness(Quiz question) {
-    var shouldAnswer = 0;
+    int shouldAnswer = 0;
 
-    var correctness = QuizCorrectness.notCorrect;
+    QuizCorrectness correctness = QuizCorrectness.notCorrect;
 
     for (int i = 0; i < question.correctAnswers.length; i++) {
       final bool correctCondition = question.correctAnswers[i].isCorrect &&
@@ -59,7 +59,7 @@ class ScoreCubit extends Cubit<ScoreState> {
     var score = 0.0;
     for (int i = 0; i < 5; i++) {
       if (quiz.answers[i].isSelected && quiz.correctAnswers[i].isCorrect) {
-        if (quiz.multipleCorrectAnswer!) {
+        if (quiz.multipleCorrectAnswer) {
           score += 0.5;
         } else {
           score += 1;
@@ -72,8 +72,10 @@ class ScoreCubit extends Cubit<ScoreState> {
 
   int countFinalScore(List<Quiz> questions) {
     var initialValue = 0.0;
-    return questions.fold(initialValue,
-        (value, e) => value + (e.scorePoint * (100 / questions.length))).floor();
+    return questions
+        .fold(initialValue,
+            (value, e) => value + (e.scorePoint * (100 / questions.length)))
+        .floor();
   }
 
   int countTotalCorrectAnswer(List<Quiz> questions) {
