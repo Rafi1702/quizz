@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:quizz/feature/category/cubit/category_cubit.dart';
+import 'package:quizz/presentation/category/cubit/category_cubit.dart';
 
-import 'package:quizz/feature/category/widgets/category_card.dart';
+import 'package:quizz/presentation/category/widgets/category_card.dart';
 
 class QuestionScreenArgument {
   final String difficulty;

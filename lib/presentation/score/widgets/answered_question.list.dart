@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quizz/domain/model/quiz.dart';
-import 'package:quizz/feature/score/cubit/score_cubit.dart';
-import 'package:quizz/feature/score/presentation/question_review_screen.dart';
+import 'package:quizz/presentation/score/cubit/score_cubit.dart';
+import 'package:quizz/presentation/score/presentation/question_review_screen.dart';
 
 class AnsweredQuestionList extends StatelessWidget {
   const AnsweredQuestionList({super.key});

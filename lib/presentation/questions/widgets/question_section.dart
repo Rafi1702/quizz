@@ -1,7 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quizz/domain/model/quiz.dart';
-import 'package:quizz/feature/questions/cubit/questions_cubit.dart';
+import 'package:quizz/presentation/questions/cubit/questions_cubit.dart';
 
 class QuestionSection extends StatelessWidget {
   const QuestionSection({super.key});
@@ -11,7 +13,6 @@ class QuestionSection extends StatelessWidget {
     return BlocBuilder<QuestionsCubit, QuestionsState>(
       buildWhen: (prev, curr) => prev.question != curr.question,
       builder: (context, state) {
-        print(state.question!.question);
         return QuizReusable(
           question: state.question,
         );
@@ -27,6 +28,7 @@ class QuizReusable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currentQuestion = question;
     if (question != null) {
       return Column(
         mainAxisSize: MainAxisSize.min,
@@ -43,24 +45,33 @@ class QuizReusable extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             itemBuilder: (context, index) {
-              final answers = question?.answers[index];
+              final answerPerQuestion = currentQuestion?.answers;
+              final answer = answerPerQuestion?[index];
+              final answerText = answer?.answer;
+              final isSelectedAnswer = answer?.isSelected;
 
-              if (answers != null) {
-                return GestureDetector(
-                  onTap: () =>
-                      context.read<QuestionsCubit>().onAnswerSelected(index),
-                  child: AnswerBox(
-                    answer: answers.answer ?? 'Unavailable',
-                    color: answers.isSelected
-                        ? Theme.of(context).colorScheme.onSecondary
-                        : Theme.of(context).colorScheme.onSurface,
-                  ),
-                );
+              if (answerPerQuestion != null && currentQuestion != null) {
+                if (index == currentQuestion.answers.length - 1) {
+                  return const Text("Halo");
+                }
+                if (answerText != null) {
+                  return GestureDetector(
+                    onTap: () =>
+                        context.read<QuestionsCubit>().onAnswerSelected(index),
+                    child: AnswerBox(
+                      answer: answerText,
+                      color: isSelectedAnswer ?? false
+                          ? Theme.of(context).colorScheme.onSecondary
+                          : Theme.of(context).colorScheme.onSurface,
+                    ),
+                  );
+                }
+                return const SizedBox();
               }
               return const SizedBox.shrink();
             },
             separatorBuilder: (context, index) => const SizedBox(height: 10.0),
-            itemCount: question?.answers.length ?? 0,
+            itemCount: currentQuestion?.answers.length ?? 0,
           ),
         ],
       );

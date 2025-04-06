@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:quizz/feature/category/model/category_ui.dart';
+import 'package:quizz/presentation/category/model/category_ui.dart';
 
 part 'category_state.dart';
 

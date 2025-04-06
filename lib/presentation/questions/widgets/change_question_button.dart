@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quizz/domain/model/quiz.dart';
-import 'package:quizz/feature/questions/cubit/questions_cubit.dart';
-import 'package:quizz/feature/score/presentation/score_screen.dart';
+import 'package:quizz/presentation/questions/cubit/questions_cubit.dart';
+import 'package:quizz/presentation/score/presentation/score_screen.dart';
 
 class ScoreScreenArgument {
   final List<Quiz?> answeredQuestion;

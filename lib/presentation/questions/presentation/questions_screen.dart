@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:quizz/data/repository/quiz_repository.dart';
 import 'package:quizz/domain/model/quiz.dart';
 
-import 'package:quizz/feature/category/presentation/category_screen.dart';
-import 'package:quizz/feature/questions/barrel.dart';
+import 'package:quizz/presentation/category/presentation/category_screen.dart';
+import 'package:quizz/presentation/global_widgets/error_placeholder.dart';
+import 'package:quizz/presentation/questions/barrel.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class QuestionsScreen extends StatelessWidget {
@@ -35,11 +36,12 @@ class QuestionsScreen extends StatelessWidget {
                 return state.quiz;
               },
               builder: (context, state) {
-                return BackButton(onPressed: () {
-                  if (state.isEmpty) {
-                    Navigator.of(context).pop();
-                  } else {
-                    showDialog<void>(
+                return BackButton(
+                  onPressed: () {
+                    if (state.isEmpty) {
+                      Navigator.of(context).pop();
+                    } else {
+                      showDialog<void>(
                         context: context,
                         builder: (context) {
                           return AlertDialog(
@@ -62,9 +64,11 @@ class QuestionsScreen extends StatelessWidget {
                                   ))
                             ],
                           );
-                        });
-                  }
-                });
+                        },
+                      );
+                    }
+                  },
+                );
               },
             ),
             title: Text(arguments.category),
@@ -99,24 +103,14 @@ class QuestionsScreen extends StatelessWidget {
                       ),
                     );
                   case QuestionsStatus.error:
-                    return Center(
-                        child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(
-                          Icons.refresh_rounded,
-                          size: 80.0,
-                        ),
-                        Text(state.errorMessage),
-                        ElevatedButton(
-                            onPressed: () {
-                              context.read<QuestionsCubit>().getQuestions(
-                                  category: arguments.category,
-                                  difficulty: arguments.difficulty);
-                            },
-                            child: const Text('Load Data')),
-                      ],
-                    ));
+                    return ErrorPlaceholder(
+                      errorMessage: state.errorMessage,
+                      onRefreshPressed: () => context
+                          .read<QuestionsCubit>()
+                          .getQuestions(
+                              category: arguments.category,
+                              difficulty: arguments.difficulty),
+                    );
                   default:
                     return Container();
                 }

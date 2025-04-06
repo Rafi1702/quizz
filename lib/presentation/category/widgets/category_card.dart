@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:quizz/feature/category/cubit/category_cubit.dart';
-import 'package:quizz/feature/category/model/category_ui.dart';
+import 'package:quizz/presentation/category/cubit/category_cubit.dart';
+import 'package:quizz/presentation/category/model/category_ui.dart';
 
-import 'package:quizz/feature/category/presentation/category_screen.dart';
-import 'package:quizz/feature/questions/presentation/questions_screen.dart';
+import 'package:quizz/presentation/category/presentation/category_screen.dart';
+import 'package:quizz/presentation/questions/presentation/questions_screen.dart';
 
 class CategoryCard extends StatelessWidget {
   final QuizUIModels quiz;

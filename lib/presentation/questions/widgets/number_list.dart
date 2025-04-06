@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:quizz/feature/questions/cubit/questions_cubit.dart';
+import 'package:quizz/presentation/questions/cubit/questions_cubit.dart';
 
 class NumberList extends StatefulWidget {
   const NumberList({super.key});

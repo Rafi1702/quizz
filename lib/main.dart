@@ -1,23 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quizz/core/network_client.dart';
 import 'package:quizz/data/datasources/quiz_remote.dart';
 import 'package:quizz/data/repository/quiz_repository.dart';
 
-import 'package:quizz/feature/category/presentation/category_screen.dart';
+import 'package:quizz/presentation/category/presentation/category_screen.dart';
 
-import 'package:quizz/feature/questions/presentation/questions_screen.dart';
+import 'package:quizz/presentation/questions/presentation/questions_screen.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:quizz/theme/theme.dart';
 
-import 'feature/score/presentation/score_screen.dart';
+import 'presentation/score/presentation/score_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
-  runApp(RepositoryProvider(
-    create: (context) => QuizRepository(QuizApi()),
-    child: const MyApp(),
-  ));
+
+  final httpClient = MyClient();
+
+  runApp(
+    RepositoryProvider(
+      create: (context) => QuizRepository(
+        QuizApi(httpClient),
+      ),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

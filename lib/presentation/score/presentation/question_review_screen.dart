@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quizz/domain/model/quiz.dart';
-import 'package:quizz/feature/questions/barrel.dart';
+import 'package:quizz/presentation/questions/barrel.dart';
 
 class QuestionReviewScreen extends StatelessWidget {
   final Quiz answeredQuestion;

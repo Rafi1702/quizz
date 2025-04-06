@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:quizz/feature/questions/barrel.dart';
-import 'package:quizz/feature/score/cubit/score_cubit.dart';
-import 'package:quizz/feature/score/widgets/answered_question.list.dart';
-import 'package:quizz/feature/score/widgets/total_score.dart';
+import 'package:quizz/presentation/questions/barrel.dart';
+import 'package:quizz/presentation/score/cubit/score_cubit.dart';
+import 'package:quizz/presentation/score/widgets/answered_question.list.dart';
+import 'package:quizz/presentation/score/widgets/total_score.dart';
 
 class ScoreScreen extends StatelessWidget {
   static const route = '/score_screen';

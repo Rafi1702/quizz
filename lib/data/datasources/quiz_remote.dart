@@ -1,36 +1,30 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:quizz/core/const.dart';
 import 'package:quizz/data/models/quiz.dart';
 import 'package:http/http.dart' as http;
 
 class QuizApi {
-  late String? key;
-  late String? url;
+  final http.BaseClient _client;
 
-  QuizApi() {
-    key = dotenv.env['API_KEY'];
-    url = dotenv.env['API_URL'];
-  }
+  const QuizApi(this._client);
 
   Future<List<QuizDto>> getQuiz(
       {required String category, required String difficulty}) async {
-      final response = await http.get(
-          Uri.parse(
-              '$url/questions?category=$category&difficulty=$difficulty&limit=7'),
-          headers: {
-            'x-api-key': key ?? 'none',
-          }).timeout(const Duration(seconds: 3));
+    final response = await _client.get(
+      Uri.parse(
+          '$url/questions?category=$category&difficulty=$difficulty&limit=7'),
+    );
 
-      final decodedResponse = jsonDecode(response.body);
+    final decodedResponse = jsonDecode(response.body);
 
-      if (response.statusCode == 200) {
-        return (decodedResponse as List).map((e) {
-          return QuizDto.fromJson(e);
-        }).toList();
-      }
+    if (response.statusCode == 200) {
+      return (decodedResponse as List).map((e) {
+        return QuizDto.fromJson(e);
+      }).toList();
+    }
 
-      throw HttpException(decodedResponse['error']);
+    throw HttpException(decodedResponse['error']);
   }
 }
