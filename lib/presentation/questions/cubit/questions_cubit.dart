@@ -154,6 +154,7 @@ class QuestionsCubit extends Cubit<QuestionsState> {
       state.copyWith(
         question: currentQuestionState,
         quiz: updatingQuizzes,
+        isAllAnswered: false,
       ),
     );
   }
