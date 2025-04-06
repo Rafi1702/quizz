@@ -6,10 +6,8 @@ import 'package:quizz/presentation/score/presentation/score_screen.dart';
 
 class ScoreScreenArgument {
   final List<Quiz?> answeredQuestion;
-  final List<Quiz?> actualQuiz;
 
-  const ScoreScreenArgument(
-      {required this.answeredQuestion, required this.actualQuiz});
+  const ScoreScreenArgument({required this.answeredQuestion});
 }
 
 class ChangeQuestionButton extends StatelessWidget {
@@ -66,11 +64,11 @@ class ChangeQuestionButton extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: state.isAllAnswered
                       ? () {
-                          Navigator.of(context).pushReplacementNamed(
-                              ScoreScreen.route,
-                              arguments: ScoreScreenArgument(
-                                  answeredQuestion: state.quiz,
-                                  actualQuiz: state.fixedQuiz));
+                          Navigator.of(context)
+                              .pushReplacementNamed(ScoreScreen.route,
+                                  arguments: ScoreScreenArgument(
+                                    answeredQuestion: state.quiz,
+                                  ));
                         }
                       : null,
                   child: const Text('Submit'),

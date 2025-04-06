@@ -4,25 +4,25 @@ enum QuestionsStatus { initial, loading, success, error }
 
 @immutable
 class QuestionsState extends Equatable {
-  const QuestionsState(
-      {this.duration = 3600,
-      this.isTimesUp = false,
-      this.status = QuestionsStatus.initial,
-      this.quiz = const [],
-      this.question,
-      this.currentIndex = 0,
-      this.quizLength = 0,
-      this.errorMessage = '',
-      this.isAllAnswered = false,
-      this.shouldBeAnswerPerQuestion = 0,
-      this.totalAnsweredByUserPerQuestion = 0,
-      this.fixedQuiz = const []});
+  const QuestionsState({
+    this.duration = 3600,
+    this.isTimesUp = false,
+    this.status = QuestionsStatus.initial,
+    this.quiz = const [],
+    this.question,
+    this.currentIndex = 0,
+    this.quizLength = 0,
+    this.errorMessage = '',
+    this.isAllAnswered = false,
+    this.shouldBeAnswerPerQuestion = 0,
+    this.totalAnsweredByUserPerQuestion = 0,
+  });
 
   final int duration;
   final bool isTimesUp;
   final QuestionsStatus status;
   final List<Quiz?> quiz;
-  final List<Quiz?> fixedQuiz;
+
   final Quiz? question;
   final int currentIndex;
   final int quizLength;
@@ -43,7 +43,6 @@ class QuestionsState extends Equatable {
     String? errorMessage,
     int? shouldBeAnswerPerQuestion,
     int? totalAnsweredByUserPerQuestion,
-    List<Quiz?>? fixedQuiz,
   }) =>
       QuestionsState(
         duration: duration ?? this.duration,
@@ -59,7 +58,6 @@ class QuestionsState extends Equatable {
             shouldBeAnswerPerQuestion ?? this.shouldBeAnswerPerQuestion,
         totalAnsweredByUserPerQuestion: totalAnsweredByUserPerQuestion ??
             this.totalAnsweredByUserPerQuestion,
-        fixedQuiz: fixedQuiz ?? this.fixedQuiz,
       );
 
   @override
@@ -74,6 +72,5 @@ class QuestionsState extends Equatable {
         isAllAnswered,
         shouldBeAnswerPerQuestion,
         totalAnsweredByUserPerQuestion,
-        fixedQuiz,
       ];
 }

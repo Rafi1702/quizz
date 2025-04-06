@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -118,6 +119,7 @@ class QuestionsCubit extends Cubit<QuestionsState> {
     }
 
     final currentIndex = changeIndex(state.currentIndex);
+    log(currentIndex.toString());
 
     final updatedQuestion = state.quiz[currentIndex];
 
@@ -125,6 +127,33 @@ class QuestionsCubit extends Cubit<QuestionsState> {
       state.copyWith(
         question: updatedQuestion,
         currentIndex: currentIndex,
+      ),
+    );
+  }
+
+  void onAnswerReset() {
+    final currentQuestion = state.question;
+    final resetCurrentQuestionAnswer = currentQuestion?.answers.map((e) {
+      return e.copyWith(isSelected: false);
+    }).toList();
+
+    final currentQuestionState = currentQuestion?.copyWith(
+      answers: resetCurrentQuestionAnswer,
+    );
+
+    final updatingQuizzes = state.quiz.map(
+      (e) {
+        if (e?.id == currentQuestionState?.id) {
+          return currentQuestionState?.copyWith(isAnswered: false);
+        }
+        return e;
+      },
+    ).toList();
+
+    return emit(
+      state.copyWith(
+        question: currentQuestionState,
+        quiz: updatingQuizzes,
       ),
     );
   }

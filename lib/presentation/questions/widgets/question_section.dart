@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quizz/domain/model/quiz.dart';
@@ -52,7 +50,11 @@ class QuizReusable extends StatelessWidget {
 
               if (answerPerQuestion != null && currentQuestion != null) {
                 if (index == currentQuestion.answers.length - 1) {
-                  return const Text("Halo");
+                  return FilledButton(
+                    onPressed: () =>
+                        context.read<QuestionsCubit>().onAnswerReset(),
+                    child: const Text("Reset Answers"),
+                  );
                 }
                 if (answerText != null) {
                   return GestureDetector(
