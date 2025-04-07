@@ -3,6 +3,7 @@ import 'package:quizz/data/repository/quiz_repository.dart';
 import 'package:quizz/domain/model/quiz.dart';
 
 import 'package:quizz/presentation/category/presentation/category_screen.dart';
+import 'package:quizz/presentation/global_widgets/cubit/app_cubit.dart';
 import 'package:quizz/presentation/global_widgets/error_placeholder.dart';
 import 'package:quizz/presentation/questions/barrel.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,13 +23,36 @@ class QuestionsScreen extends StatelessWidget {
           QuestionsCubit(quizRepository: context.read<QuizRepository>())
             ..getQuestions(
                 category: arguments.category, difficulty: arguments.difficulty),
-      child: BlocListener<QuestionsCubit, QuestionsState>(
-        listenWhen: (prev, curr) => prev.isTimesUp != curr.isTimesUp,
-        listener: (context, state) {
-          if (state.isTimesUp) {
-            Navigator.of(context).pop();
-          }
-        },
+      child: MultiBlocListener(
+        listeners: [
+          // BlocListener<QuestionsCubit, QuestionsState>(
+          //   listenWhen: (prev, curr) => prev.isTimesUp != curr.isTimesUp,
+          //   listener: (context, state) {
+          //     if (state.isTimesUp) {
+          //       Navigator.of(context).pop();
+          //     }
+          //   },
+          // ),
+          BlocListener<AppCubit, AppState>(
+            listenWhen: (previous, current) =>
+                previous.duration != current.duration,
+            listener: (context, state) {
+              if (state.duration == 0) {
+                context.read<AppCubit>().cancelTimer();
+                Navigator.of(context).pop();
+              }
+            },
+          ),
+          BlocListener<QuestionsCubit, QuestionsState>(
+            listenWhen: (previous, current) =>
+                previous.status != current.status,
+            listener: (context, state) {
+              if (state.status == QuestionsStatus.success) {
+                context.read<AppCubit>().startTimer();
+              }
+            },
+          ),
+        ],
         child: Scaffold(
           appBar: AppBar(
             leading: BlocSelector<QuestionsCubit, QuestionsState, List<Quiz?>>(

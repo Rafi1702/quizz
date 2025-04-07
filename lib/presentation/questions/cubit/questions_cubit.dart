@@ -54,21 +54,10 @@ class QuestionsCubit extends Cubit<QuestionsState> {
         quiz: updatedAnswerPerQuestionQuiz,
         quizLength: quiz.length,
       ));
-
-      // Start Timer After Success to fetch Quiz
-      timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-        onDurationChange(state.duration - 1);
-      });
     } catch (e) {
       emit(state.copyWith(
           status: QuestionsStatus.error, errorMessage: e.toString()));
     }
-  }
-
-  void onDurationChange(int value) {
-    final bool isTimesUp = value == 0;
-    if (isTimesUp) timer?.cancel();
-    return emit(state.copyWith(duration: value, isTimesUp: isTimesUp));
   }
 
   void onAnswerSelected(int index) {

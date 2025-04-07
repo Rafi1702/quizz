@@ -1,22 +1,13 @@
-import 'package:quizz/data/datasources/quiz_remote.dart';
+import 'package:quizz/data/datasources/remote/quiz_remote.dart';
 
 import 'package:quizz/domain/model/quiz.dart';
-
-extension on String? {
-  bool get getBool {
-    switch (this) {
-      case "true":
-        return true;
-      default:
-        return false;
-    }
-  }
-}
+import 'package:quizz/core/extension.dart';
+import 'dart:async';
 
 class QuizRepository {
-  final QuizApi quizApi;
+  final QuizRemote quizApi;
 
-  const QuizRepository(this.quizApi);
+  QuizRepository(this.quizApi);
 
   Future<List<Quiz>> getQuiz(
       {required String category, required String difficulty}) async {

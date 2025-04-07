@@ -5,7 +5,6 @@ enum QuestionsStatus { initial, loading, success, error }
 @immutable
 class QuestionsState extends Equatable {
   const QuestionsState({
-    this.duration = 3600,
     this.isTimesUp = false,
     this.status = QuestionsStatus.initial,
     this.quiz = const [],
@@ -18,11 +17,9 @@ class QuestionsState extends Equatable {
     this.totalAnsweredByUserPerQuestion = 0,
   });
 
-  final int duration;
   final bool isTimesUp;
   final QuestionsStatus status;
   final List<Quiz?> quiz;
-
   final Quiz? question;
   final int currentIndex;
   final int quizLength;
@@ -45,7 +42,6 @@ class QuestionsState extends Equatable {
     int? totalAnsweredByUserPerQuestion,
   }) =>
       QuestionsState(
-        duration: duration ?? this.duration,
         isTimesUp: isTimesUp ?? this.isTimesUp,
         status: status ?? this.status,
         quiz: quiz ?? this.quiz,
@@ -62,7 +58,6 @@ class QuestionsState extends Equatable {
 
   @override
   List<Object?> get props => [
-        duration,
         isTimesUp,
         status,
         question,

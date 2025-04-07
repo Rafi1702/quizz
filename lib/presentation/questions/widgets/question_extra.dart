@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quizz/core/extension.dart';
+import 'package:quizz/presentation/global_widgets/cubit/app_cubit.dart';
 import 'package:quizz/presentation/questions/cubit/questions_cubit.dart';
 
 class QuestionExtra extends StatelessWidget {
@@ -78,17 +80,13 @@ class TimerBox extends StatelessWidget {
         children: [
           Icon(Icons.timer_rounded,
               color: Theme.of(context).colorScheme.onInverseSurface),
-          BlocSelector<QuestionsCubit, QuestionsState, int>(
+          BlocSelector<AppCubit, AppState, int>(
             selector: (state) {
-              // TODO: return selected state
               return state.duration;
             },
             builder: (context, state) {
-              String minute =
-                  ((state / 60) % 60).floor().toString().padLeft(2, '0');
-              String seconds = (state % 60).floor().toString().padLeft(2, '0');
               return Text(
-                '$minute:$seconds',
+                state.getHourlyFormat,
                 style: TextStyle(
                     color: Theme.of(context).colorScheme.onInverseSurface),
               );
